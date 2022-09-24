@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/my_black"
+    tools:context=".views.activity.MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_marginTop="@dimen/_70sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_chat_bubble_outline_24" />
+
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/btn_ccp"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_marginTop="27dp"
+        app:ccp_autoDetectCountry="true"
+        app:ccp_textGravity="CENTER"
+        app:layout_constraintEnd_toStartOf="@+id/et_phone_number"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <EditText
+        android:id="@+id/et_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:ems="10"
+        android:hint="Enter Your Number"
+        android:inputType="phone"
+        android:textColor="@color/white"
+        android:textColorHint="	#778899"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/btn_send_otp"
+        android:textSize="@dimen/_13sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_35sdp"
+        android:text="Send OTP"
+        android:padding="@dimen/_7sdp"
+        android:layout_marginLeft="@dimen/_40sdp"
+        android:layout_marginRight="@dimen/_40sdp"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/my_orange"
+        app:layout_constraintEnd_toEndOf="@+id/et_phone_number"
+        app:layout_constraintStart_toEndOf="@+id/btn_ccp"
+        app:layout_constraintTop_toBottomOf="@+id/et_phone_number" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="60dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/btn_send_otp"
+        app:layout_constraintStart_toStartOf="@+id/btn_send_otp"
+        app:layout_constraintTop_toBottomOf="@+id/btn_send_otp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
