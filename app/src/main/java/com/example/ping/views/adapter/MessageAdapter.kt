@@ -8,16 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
 import com.example.ping.model.MessageModel
-import com.google.android.gms.dynamic.IFragmentWrapper
 import com.google.firebase.auth.FirebaseAuth
 
 class MessageAdapter(
-    val context: Context,
-    val messagesList: ArrayList<MessageModel>
+    private val context: Context,
+    private val messagesList: ArrayList<MessageModel>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val ITEM_RECEIVE = 1
-    val ITEM_SENT = 2
+    private val ITEM_RECEIVE = 1
+    private val ITEM_SENT = 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == 1){
@@ -60,10 +59,10 @@ class MessageAdapter(
     }
 
     class SentViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val sentMessage = itemView.findViewById<TextView>(R.id.tv_sent_message)
+        val sentMessage: TextView = itemView.findViewById<TextView>(R.id.tv_sent_message)
     }
 
     class ReceivedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val receivedMessage = itemView.findViewById<TextView>(R.id.tv_received_message)
+        val receivedMessage: TextView = itemView.findViewById<TextView>(R.id.tv_received_message)
     }
 }

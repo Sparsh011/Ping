@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
 import com.example.ping.model.User
 import com.example.ping.views.activity.ChatActivity
-import com.google.firebase.auth.FirebaseAuth
 
 class UsersAdapter(
-    val context: Context,
-    val userList: ArrayList<User>
+    private val context: Context,
+    private var userList: ArrayList<User>
 ): RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.user_layout, parent, false)
         return UsersViewHolder(view)
@@ -41,5 +41,4 @@ class UsersAdapter(
         val tvUsername = itemView.findViewById<TextView>(R.id.tv_username)
 
     }
-
 }

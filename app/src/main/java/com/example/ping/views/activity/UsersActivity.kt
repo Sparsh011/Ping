@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,6 +60,23 @@ class UsersActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.main_menu, menu)
+
+        val menuItem = menu?.findItem(R.id.search)
+        val searchView: SearchView = menuItem?.actionView as SearchView
+        searchView.queryHint = "Search Here..."
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                // Called when the user presses enter
+                return true
+            }
+
+            override fun onQueryTextChange(text: String?): Boolean {
+                showFilteredList(text)
+                return true
+            }
+        })
+
         return true
     }
 
@@ -72,8 +90,31 @@ class UsersActivity : AppCompatActivity() {
                 startActivity(Intent(this@UsersActivity, MainActivity::class.java))
                 return true
             }
+            R.id.search -> {
+
+            }
             else -> super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    private fun showFilteredList(initials: String?){
+        dbRef.child("user").addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                usersList.clear()
+                for (item in snapshot.children){
+                    val currentUser = item.getValue(User::class.java)
+                    if (auth.currentUser?.uid != currentUser?.uid && currentUser?.name?.lowercase()!!.contains(initials!!.lowercase())){
+                        usersList.add(currentUser)
+                    }
+                }
+
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 }
