@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var codeSent: String
     private lateinit var mCallback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var mProgressBar: ProgressBar
+    private lateinit var mUsername: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         val etPhoneNumber = findViewById<EditText>(R.id.et_phone_number)
         val ccp = findViewById<CountryCodePicker>(R.id.btn_ccp)
         mProgressBar = findViewById(R.id.progressBar)
-
+        val etUsername = findViewById<EditText>(R.id.et_name)
         var countryCode = ccp.selectedCountryCodeWithPlus
 
 //        if country is changed -
@@ -46,11 +47,12 @@ class MainActivity : AppCompatActivity() {
             val number = etPhoneNumber.text.toString()
             val phoneNumber = countryCode + number
             mProgressBar.visibility = View.VISIBLE
-            sendOtp(phoneNumber)
+            mUsername = etUsername.text.toString()
+            sendOtp(phoneNumber, mUsername)
         }
     }
 
-    private fun sendOtp(phoneNumber: String) = CoroutineScope(Dispatchers.IO).launch{
+    private fun sendOtp(phoneNumber: String, username: String) = CoroutineScope(Dispatchers.IO).launch{
         auth = FirebaseAuth.getInstance()
 
         mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
@@ -67,6 +69,8 @@ class MainActivity : AppCompatActivity() {
                 codeSent = code
                 val intent = Intent(this@MainActivity, VerifyOTP::class.java)
                 intent.putExtra("otp", codeSent)
+                intent.putExtra("name", username)
+                intent.putExtra("number", phoneNumber)
                 startActivity(intent)
             }
         }
@@ -86,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null){
             // means user is already verified
-            val intent = Intent(this@MainActivity, ChatActivity::class.java)
+            val intent = Intent(this@MainActivity, UsersActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }

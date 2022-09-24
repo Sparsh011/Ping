@@ -6,7 +6,10 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ping.R
+import com.example.ping.model.User
 import com.google.firebase.auth.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +22,7 @@ class VerifyOTP : AppCompatActivity() {
     private lateinit var enteredOTP: String
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var mProgressBarOfOTPAuth: ProgressBar
+    private lateinit var dbRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +44,7 @@ class VerifyOTP : AppCompatActivity() {
             enteredOTP = mGetOtp.text.toString()
             if (enteredOTP.trim { it <= ' ' }.isEmpty()) {
                 Toast.makeText(this, "Enter OTP!", Toast.LENGTH_SHORT).show()
-            }
-            else {
+            } else {
                 mProgressBarOfOTPAuth.visibility = View.VISIBLE
                 val codeReceived = intent.getStringExtra("otp")
                 val credential = PhoneAuthProvider.getCredential(codeReceived!!, enteredOTP)
@@ -56,21 +59,30 @@ class VerifyOTP : AppCompatActivity() {
                 if (task.isSuccessful) {
                     mProgressBarOfOTPAuth.visibility = View.INVISIBLE
                     Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this@VerifyOTP, ChatActivity::class.java)
-                startActivity(intent)
+                    val username = intent.getStringExtra("name")
+                    val phoneNumber = intent.getStringExtra("number")
+                    addUserToDatabase(username!!, phoneNumber!!, firebaseAuth.currentUser?.uid!!)
+                    val intent = Intent(this@VerifyOTP, UsersActivity::class.java)
                     finish()
-                } else {
+                    startActivity(intent)
+                }
+                else {
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         mProgressBarOfOTPAuth.visibility = View.INVISIBLE
                         Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-        }
-        catch (e: Exception){
-            withContext(Dispatchers.Main){
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
                 Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun addUserToDatabase(name: String, number: String, uid: String){
+        dbRef = FirebaseDatabase.getInstance().reference
+
+        dbRef.child("user").child(uid).setValue(User(name, number, uid))
     }
 }

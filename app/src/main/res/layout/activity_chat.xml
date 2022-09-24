@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,10 +8,44 @@
     tools:context=".views.activity.ChatActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_chats"
+        android:id="@+id/rv_custom_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentTop="true"
+        app:layout_constraintHorizontal_bias="0.5"
+         />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/_7sdp"
+        android:weightSum="100">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_45sdp"
+            android:id="@+id/et_message"
+            android:layout_weight="85"
+            android:hint="Message..."
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_1sdp"
+            android:textColor="@color/white"
+            android:background="@drawable/message_bg"
+            android:textColorHint="@color/my_grey"
+            />
+
+        <ImageView
+            android:id="@+id/img_send_message"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_45sdp"
+            android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_baseline_send_24"
+            android:layout_weight="15"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
