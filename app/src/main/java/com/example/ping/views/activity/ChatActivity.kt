@@ -29,6 +29,7 @@ class ChatActivity : AppCompatActivity() {
         val name = intent.getStringExtra("nameOfUser")
         val receiverUid = intent.getStringExtra("uid")
         supportActionBar?.title = name
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val senderUid = FirebaseAuth.getInstance().currentUser?.uid
         senderRoom = receiverUid + senderUid
@@ -49,12 +50,14 @@ class ChatActivity : AppCompatActivity() {
             val msg = message.text.toString()
             val messageObject = MessageModel(msg, senderUid)
 
-            dbRef.child("chats").child(senderRoom!!).child("messages").push()
-                .setValue(messageObject).addOnSuccessListener {
-                    dbRef.child("chats").child(receiverRoom!!).child("messages").push().setValue(messageObject)
-                }
+            if (msg.trim().isNotEmpty()){
+                dbRef.child("chats").child(senderRoom!!).child("messages").push()
+                    .setValue(messageObject).addOnSuccessListener {
+                        dbRef.child("chats").child(receiverRoom!!).child("messages").push().setValue(messageObject)
+                    }
 
-            message.setText("")
+                message.setText("")
+            }
         }
 
 //        Adding data to recyclerView -
