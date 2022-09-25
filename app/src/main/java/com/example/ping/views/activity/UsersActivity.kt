@@ -37,6 +37,7 @@ class UsersActivity : AppCompatActivity() {
         usersRecyclerView.layoutManager = LinearLayoutManager(this)
         usersRecyclerView.adapter = adapter
 
+//        Retrieving chats from database -
         dbRef.child("user").addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 usersList.clear()
@@ -90,8 +91,8 @@ class UsersActivity : AppCompatActivity() {
                 startActivity(Intent(this@UsersActivity, MainActivity::class.java))
                 return true
             }
-            R.id.search -> {
-
+            R.id.show_memes -> {
+                startActivity(Intent(this@UsersActivity, MemesActivity::class.java))
             }
             else -> super.onOptionsItemSelected(item)
         }

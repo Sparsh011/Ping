@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.ping" >
+    package="com.example.ping">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -12,11 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ping"
-        tools:targetApi="31" >
+        tools:targetApi="31">
         <activity
-            android:name=".views.activity.ChatActivity"
+            android:name=".views.activity.MemesActivity"
             android:parentActivityName=".views.activity.UsersActivity"
             android:exported="false" />
+        <activity
+            android:name=".views.activity.ChatActivity"
+            android:exported="false"
+            android:parentActivityName=".views.activity.UsersActivity" />
         <activity
             android:name=".views.activity.UsersActivity"
             android:exported="false" />
@@ -27,7 +33,7 @@
         <activity
             android:name=".views.activity.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Ping.NoActionBar" >
+            android:theme="@style/Theme.Ping.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

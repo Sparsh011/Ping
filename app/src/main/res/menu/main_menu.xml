@@ -10,6 +10,12 @@
         android:title="Search"
         app:actionViewClass="android.widget.SearchView" />
     <item
+        android:id="@+id/show_memes"
+        android:orderInCategory="100"
+        android:icon="@drawable/meme"
+        app:showAsAction="ifRoom"
+        android:title="show memes" />
+    <item
         android:id="@+id/logout"
         app:showAsAction="never"
         android:title="Logout"

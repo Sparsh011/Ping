@@ -51,7 +51,7 @@ class ChatActivity : AppCompatActivity() {
             val messageObject = MessageModel(msg, senderUid)
 
             if (msg.trim().isNotEmpty()){
-                dbRef.child("chats").child(senderRoom!!).child("messages").push()
+                dbRef.child("chats").child(senderRoom!!).child("messages").push() // Generating a new child location
                     .setValue(messageObject).addOnSuccessListener {
                         dbRef.child("chats").child(receiverRoom!!).child("messages").push().setValue(messageObject)
                     }

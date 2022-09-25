@@ -59,10 +59,10 @@ class MessageAdapter(
     }
 
     class SentViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val sentMessage: TextView = itemView.findViewById<TextView>(R.id.tv_sent_message)
+        val sentMessage: TextView = itemView.findViewById(R.id.tv_sent_message)
     }
 
     class ReceivedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val receivedMessage: TextView = itemView.findViewById<TextView>(R.id.tv_received_message)
+        val receivedMessage: TextView = itemView.findViewById(R.id.tv_received_message)
     }
 }
