@@ -4,29 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/my_black"
     tools:context=".views.activity.MemesActivity">
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        />-->
-<!--    <Button-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/btnadfa"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        />-->
-
-    <ImageView
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_200sdp"
-        android:id="@+id/imgmemeloaded"
-        app:layout_constraintTop_toTopOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_memes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading_memes"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_loading_memes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/pb_loading_memes"
+        app:layout_constraintStart_toStartOf="@+id/pb_loading_memes"
+        app:layout_constraintEnd_toEndOf="@+id/pb_loading_memes"
+        android:text="Loading Memes..."
+        android:layout_margin="@dimen/_10sdp"
+        android:textColor="@color/my_grey"
+        android:textSize="@dimen/_15sdp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

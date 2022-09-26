@@ -8,11 +8,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ping.R
-import com.example.ping.network.RandomMemeAPIModel
 
 class MemesAdapter(
     private val context: Context,
-    private val memes: List<RandomMemeAPIModel>
+    private val memes: List<String>
 ) : RecyclerView.Adapter<MemesAdapter.MemesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemesViewHolder {
@@ -22,7 +21,8 @@ class MemesAdapter(
 
     override fun onBindViewHolder(holder: MemesViewHolder, position: Int) {
         Glide.with(context)
-            .load(memes[position].url)
+            .load(memes[position])
+            .fitCenter()
             .into(holder.imgMeme)
     }
 

@@ -7,10 +7,19 @@
     <ImageView
         android:id="@+id/img_meme"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp"
-        android:paddingStart="@dimen/_25sdp"
-        android:paddingEnd="@dimen/_25sdp"
-        tools:src="@color/my_grey"
-        android:layout_margin="@dimen/_15sdp"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        tools:src="@color/my_grey" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_below="@+id/img_meme"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:background="@color/my_grey"/>
 
 </RelativeLayout>
