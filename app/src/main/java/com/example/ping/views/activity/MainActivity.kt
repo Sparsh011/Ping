@@ -45,10 +45,18 @@ class MainActivity : AppCompatActivity() {
 
         btnSendOtp.setOnClickListener{
             val number = etPhoneNumber.text.toString()
-            val phoneNumber = countryCode + number
-            mProgressBar.visibility = View.VISIBLE
             mUsername = etUsername.text.toString()
-            sendOtp(phoneNumber, mUsername)
+            if (number.length != 10){
+                Toast.makeText(this, "Enter A Valid Number!", Toast.LENGTH_SHORT).show()
+            }
+            else if (mUsername.trim().isEmpty()){
+                Toast.makeText(this, "Enter Your Name!", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                val phoneNumber = countryCode + number
+                mProgressBar.visibility = View.VISIBLE
+                sendOtp(phoneNumber, mUsername)
+            }
         }
     }
 

@@ -1,10 +1,11 @@
 package com.example.ping.views.activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
@@ -16,11 +17,11 @@ import com.google.firebase.database.*
 class ChatActivity : AppCompatActivity() {
     private lateinit var customChatRecyclerView: RecyclerView
     private lateinit var message: EditText
-    private lateinit var sendMessage: ImageView
+    private lateinit var ivSendMessage: ImageView
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var messageList: ArrayList<MessageModel>
-    var receiverRoom: String? = null
-    var senderRoom: String? = null
+    private var receiverRoom: String? = null
+    private var senderRoom: String? = null
     private lateinit var dbRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,14 +40,14 @@ class ChatActivity : AppCompatActivity() {
 //        Initialising views -
         customChatRecyclerView = findViewById(R.id.rv_custom_chat)
         message = findViewById(R.id.et_message)
-        sendMessage = findViewById(R.id.img_send_message)
+        ivSendMessage = findViewById(R.id.img_send_message)
         messageList = ArrayList()
         messageAdapter = MessageAdapter(this, messageList)
         customChatRecyclerView.layoutManager = LinearLayoutManager(this)
         customChatRecyclerView.adapter = messageAdapter
 
 //      Adding message to database -
-        sendMessage.setOnClickListener{
+        ivSendMessage.setOnClickListener{
             val msg = message.text.toString()
             val messageObject = MessageModel(msg, senderUid)
 
@@ -73,7 +74,7 @@ class ChatActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Toast.makeText(applicationContext, "Unable To Load Messages!", Toast.LENGTH_SHORT).show()
             }
 
         })
