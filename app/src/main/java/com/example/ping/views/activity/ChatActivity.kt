@@ -71,6 +71,7 @@ class ChatActivity : AppCompatActivity() {
                 }
 
                 messageAdapter.notifyDataSetChanged()
+                customChatRecyclerView.scrollToPosition(messageList.size-1)
             }
 
             override fun onCancelled(error: DatabaseError) {
