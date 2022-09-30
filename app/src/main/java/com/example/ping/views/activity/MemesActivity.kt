@@ -2,30 +2,23 @@ package com.example.ping.views.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
 import com.example.ping.network.ApiService
-import com.example.ping.network.RandomMemeAPIModel
 import com.example.ping.views.adapter.MemesAdapter
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.observers.DisposableSingleObserver
-import io.reactivex.rxjava3.schedulers.Schedulers
+import java.io.IOException
 
 class MemesActivity : AppCompatActivity() {
-    private val randomMemeApiService = ApiService()
-    private lateinit var memesList : ArrayList<String>
-    private val compositeDisposable = CompositeDisposable()
-    private lateinit var memesRecyclerView: RecyclerView
+    private lateinit var rvMemes : RecyclerView
     private lateinit var memesAdapter: MemesAdapter
-    private var flag = false
-    private lateinit var progressBar: ProgressBar
-    private lateinit var tvLoadingMemes: TextView
-    private lateinit var memesSet: HashSet<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,48 +26,50 @@ class MemesActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Memes Center"
 
-        progressBar = findViewById(R.id.pb_loading_memes)
-        tvLoadingMemes = findViewById(R.id.tv_loading_memes)
-        memesList = ArrayList()
-        memesSet = HashSet()
+//        Initialising views -
+        rvMemes = findViewById(R.id.rv_memes)
+        val progressBar: ProgressBar = findViewById(R.id.pb_loading_memes)
+        val tvLoadingMemes: TextView = findViewById(R.id.tv_loading_memes)
 
-        if (flag){
-            progressBar.visibility = View.GONE
-            tvLoadingMemes.visibility = View.GONE
+//        Instantiating variables -
+        var memesList : ArrayList<String>
+        val memesSet: HashSet<String> = HashSet()
+        memesAdapter = MemesAdapter(this)
+        rvMemes.layoutManager = LinearLayoutManager(this)
+
+//        Fetching memes -
+        for (i in 0 .. 35){
+            lifecycleScope.launchWhenCreated {
+                progressBar.isVisible = true
+                tvLoadingMemes.isVisible = true
+                val response = try {
+                    ApiService.api.getMemes()
+                }
+                catch (e: IOException){
+                    Log.e("MainActivity", "IOException, You might not have internet connection!")
+                    Toast.makeText(this@MemesActivity, "You Might Not Have Internet Connection!", Toast.LENGTH_SHORT).show()
+                    progressBar.isVisible = false
+                    return@launchWhenCreated
+                }
+
+                if (response.isSuccessful && response.body() != null){
+                    memesSet.add(response.body()!!.url)
+                }
+                else Toast.makeText(this@MemesActivity, "Unable to fetch", Toast.LENGTH_SHORT).show()
+
+                if (i == 34){
+                    progressBar.isVisible = false
+                    tvLoadingMemes.isVisible = false
+
+//                    Populating data to recyclerView -
+                    rvMemes.visibility = View.VISIBLE
+                    memesList = memesSet.toList() as ArrayList<String>
+                    memesAdapter.memes = memesList
+                    rvMemes.adapter = memesAdapter
+                }
+            }
         }
-        getRandomMeme()
-    }
-
-    private fun getRandomMeme(){
-        for (i in 0..90){
-            compositeDisposable.add(
-                randomMemeApiService.getRandomMeme()
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<RandomMemeAPIModel>(){
-                        override fun onSuccess(value: RandomMemeAPIModel) {
-                            if (i == 89){
-                                memesSet.add(value.url)
-                                memesRecyclerView = findViewById(R.id.rv_memes)
-                                memesList = memesSet.toList() as ArrayList<String>
-                                memesAdapter = MemesAdapter(this@MemesActivity, memesList)
-                                memesRecyclerView.layoutManager = LinearLayoutManager(this@MemesActivity)
-                                memesRecyclerView.adapter = memesAdapter
-                                memesRecyclerView.visibility = View.VISIBLE
-                                flag = true
-                                progressBar.visibility = View.GONE
-                                tvLoadingMemes.visibility = View.GONE
-                            }
-                            else{
-                                memesSet.add(value.url)
-                            }
-                        }
-
-                        override fun onError(e: Throwable) {
-                            e.printStackTrace()
-                        }
-                    })
-            )
-        }
+//        Fetching multiple but problem is ki jb 2nd time load open kro activity tb ye s 3,4 memes hi load kr rha hai
+//        memesSet.clear()
     }
 }
