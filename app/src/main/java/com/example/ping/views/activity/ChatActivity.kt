@@ -23,6 +23,7 @@ class ChatActivity : AppCompatActivity() {
     private var receiverRoom: String? = null
     private var senderRoom: String? = null
     private lateinit var dbRef: DatabaseReference
+    private lateinit var ivMoreOptions: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class ChatActivity : AppCompatActivity() {
         messageAdapter = MessageAdapter(this, messageList)
         customChatRecyclerView.layoutManager = LinearLayoutManager(this)
         customChatRecyclerView.adapter = messageAdapter
+        ivMoreOptions = findViewById(R.id.iv_more_options)
 
 //      Adding message to database -
         ivSendMessage.setOnClickListener{

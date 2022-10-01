@@ -25,6 +25,13 @@
         android:layout_marginBottom="@dimen/_7sdp"
         android:weightSum="100">
 
+        <ImageView
+            android:id="@+id/iv_more_options"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/ic_baseline_add_24"
+            />
+
         <EditText
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
