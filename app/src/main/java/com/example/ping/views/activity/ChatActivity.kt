@@ -1,15 +1,18 @@
 package com.example.ping.views.activity
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
 import com.example.ping.model.MessageModel
+import com.example.ping.utils.Constants
+import com.example.ping.views.adapter.CustomListItemAdapter
 import com.example.ping.views.adapter.MessageAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -24,6 +27,8 @@ class ChatActivity : AppCompatActivity() {
     private var senderRoom: String? = null
     private lateinit var dbRef: DatabaseReference
     private lateinit var ivMoreOptions: ImageView
+    private var mImagePath: String = ""
+    private lateinit var mCustomListDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +52,11 @@ class ChatActivity : AppCompatActivity() {
         customChatRecyclerView.layoutManager = LinearLayoutManager(this)
         customChatRecyclerView.adapter = messageAdapter
         ivMoreOptions = findViewById(R.id.iv_more_options)
+
+//        Choosing image -
+        ivMoreOptions.setOnClickListener{
+            showPopup("Select Image From", Constants.selectImageFrom())
+        }
 
 //      Adding message to database -
         ivSendMessage.setOnClickListener{
@@ -81,5 +91,20 @@ class ChatActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun showPopup(title: String, selectImageFrom: ArrayList<String>) {
+        mCustomListDialog = Dialog(this)
+        val inflater = layoutInflater
+        val dialogLayoutInflater = inflater.inflate(R.layout.dialog_custom_list, null)
+        mCustomListDialog.setContentView(dialogLayoutInflater)
+        val tvTitle = mCustomListDialog.findViewById<TextView>(R.id.tv_title)
+        val rvList = mCustomListDialog.findViewById<RecyclerView>(R.id.rv_list)
+        rvList.layoutManager = LinearLayoutManager(this)
+        tvTitle.text = title
+
+        val adapter = CustomListItemAdapter(selectImageFrom)
+        rvList.adapter = adapter
+        mCustomListDialog.show()
     }
 }
