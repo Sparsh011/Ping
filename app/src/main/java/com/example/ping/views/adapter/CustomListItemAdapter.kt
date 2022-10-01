@@ -8,8 +8,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
+import com.example.ping.views.activity.ChatActivity
 
 class CustomListItemAdapter(
+    private val activity: Activity,
     private val listItems: List<String>,
 ) :
     RecyclerView.Adapter<CustomListItemAdapter.ViewHolder>() {
@@ -21,9 +23,14 @@ class CustomListItemAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         val item = listItems[position]
         holder.tvText.text = item
+
+        holder.tvText.setOnClickListener{
+            if (activity is ChatActivity){
+                activity.selectImageVia(item)
+            }
+        }
 
     }
 

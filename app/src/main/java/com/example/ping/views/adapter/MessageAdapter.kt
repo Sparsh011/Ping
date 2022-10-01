@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
@@ -60,9 +61,11 @@ class MessageAdapter(
 
     class SentViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val sentMessage: TextView = itemView.findViewById(R.id.tv_sent_message)
+        val sentImage: ImageView = itemView.findViewById(R.id.iv_sent_image)
     }
 
     class ReceivedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val receivedMessage: TextView = itemView.findViewById(R.id.tv_received_message)
+        val receivedImage: ImageView = itemView.findViewById(R.id.iv_received_image)
     }
 }

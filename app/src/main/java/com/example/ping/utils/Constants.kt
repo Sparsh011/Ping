@@ -10,4 +10,7 @@ object Constants {
         list.add("Gallery")
         return list
     }
+
+    const val SELECT_FROM_CAMERA = "Camera"
+    const val SELECT_FROM_GALLERY = "Gallery"
 }

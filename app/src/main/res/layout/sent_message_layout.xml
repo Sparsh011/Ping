@@ -21,6 +21,13 @@
             android:textSize="@dimen/_15sdp"
             tools:text="Sent message" />
 
+        <ImageView
+            android:id="@+id/iv_sent_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@+id/tv_sent_message"/>
+
     </RelativeLayout>
 
 </RelativeLayout>
