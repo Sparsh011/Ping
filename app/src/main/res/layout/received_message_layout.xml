@@ -22,12 +22,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_15sdp"/>
 
-        <ImageView
-            android:id="@+id/iv_received_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_below="@+id/tv_received_message"/>
 
     </RelativeLayout>
 

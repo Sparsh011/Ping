@@ -13,4 +13,5 @@ object Constants {
 
     const val SELECT_FROM_CAMERA = "Camera"
     const val SELECT_FROM_GALLERY = "Gallery"
+    const val IMAGE = "image"
 }

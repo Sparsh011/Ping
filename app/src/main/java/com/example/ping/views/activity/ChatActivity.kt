@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Message
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
@@ -21,6 +22,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
@@ -38,6 +40,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
+import java.io.File
 import java.lang.System.out
 
 
@@ -51,19 +54,24 @@ class ChatActivity : AppCompatActivity() {
     private var senderRoom: String? = null
     private lateinit var dbRef: DatabaseReference
     private lateinit var ivMoreOptions: ImageView
-    private var mImagePath: String = ""
     private lateinit var mCustomListDialog: Dialog
     private lateinit var mDialogToSendImage: Dialog
+    private lateinit var imageUri: Uri
+    private lateinit var receiverUid: String
+    private lateinit var senderUid: String
+    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        showPopupToSendImageUsingUri(imageUri)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         val name = intent.getStringExtra("nameOfUser")
-        val receiverUid = intent.getStringExtra("uid")
+        receiverUid = intent.getStringExtra("uid").toString()
         supportActionBar?.title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val senderUid = FirebaseAuth.getInstance().currentUser?.uid
+        senderUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
         senderRoom = receiverUid + senderUid
         receiverRoom = senderUid + receiverUid
         dbRef = FirebaseDatabase.getInstance().reference
@@ -73,22 +81,23 @@ class ChatActivity : AppCompatActivity() {
         message = findViewById(R.id.et_message)
         ivSendMessage = findViewById(R.id.img_send_message)
         messageList = ArrayList()
-        messageAdapter = MessageAdapter(this, messageList)
+        messageAdapter = MessageAdapter(this, messageList, senderUid, receiverUid)
         customChatRecyclerView.layoutManager = LinearLayoutManager(this)
         customChatRecyclerView.adapter = messageAdapter
         ivMoreOptions = findViewById(R.id.iv_more_options)
+        imageUri = createImageUri()!!
 
 //        Choosing image -
-        ivMoreOptions.setOnClickListener{
+        ivMoreOptions.setOnClickListener {
             showPopupForSelectionFromCameraOrStorage("Select Image From", Constants.selectImageFrom())
         }
 
 //      Adding message to database -
-        ivSendMessage.setOnClickListener{
+        ivSendMessage.setOnClickListener {
             val msg = message.text.toString()
             val messageObject = MessageModel(msg, senderUid)
 
-            if (msg.trim().isNotEmpty()){
+            if (msg.trim().isNotEmpty()) {
                 dbRef.child("chats").child(senderRoom!!).child("messages").push() // Generating a new child location
                     .setValue(messageObject).addOnSuccessListener {
                         dbRef.child("chats").child(receiverRoom!!).child("messages").push().setValue(messageObject)
@@ -99,16 +108,16 @@ class ChatActivity : AppCompatActivity() {
         }
 
 //        Adding data to recyclerView -
-        dbRef.child("chats").child(senderRoom!!).child("messages").addValueEventListener(object : ValueEventListener{
+        dbRef.child("chats").child(senderRoom!!).child("messages").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 messageList.clear()
-                for (item in snapshot.children){
+                for (item in snapshot.children) {
                     val messageItem = item.getValue(MessageModel::class.java)
                     messageList.add(messageItem!!)
                 }
 
                 messageAdapter.notifyDataSetChanged()
-                customChatRecyclerView.scrollToPosition(messageList.size-1)
+                customChatRecyclerView.scrollToPosition(messageList.size - 1)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -116,6 +125,15 @@ class ChatActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun createImageUri(): Uri? {
+        val image = File(applicationContext.filesDir, "camera_photos.png")
+        return FileProvider.getUriForFile(
+            applicationContext,
+            "com.example.ping.fileProvider",
+            image
+        )
     }
 
     private fun showPopupForSelectionFromCameraOrStorage(title: String, selectImageFrom: ArrayList<String>) {
@@ -133,8 +151,8 @@ class ChatActivity : AppCompatActivity() {
         mCustomListDialog.show()
     }
 
-    fun selectImageVia(selectVia: String){
-        if (selectVia == Constants.SELECT_FROM_CAMERA){
+    fun selectImageVia(selectVia: String) {
+        if (selectVia == Constants.SELECT_FROM_CAMERA) {
             Dexter.withContext(this).withPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA
@@ -144,26 +162,35 @@ class ChatActivity : AppCompatActivity() {
                         if (report.areAllPermissionsGranted()) {
                             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            startForResultToLoadImage.launch(intent)
+//                            startForResultToLoadImage.launch(intent)
+                            contract.launch(imageUri)
                         }
                     }
                 }
-                override fun onPermissionRationaleShouldBeShown(permission: MutableList<PermissionRequest>?, token: PermissionToken?) {
+
+                override fun onPermissionRationaleShouldBeShown(
+                    permission: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
                     showRationalDialogForPermissions()
                 }
             }).onSameThread().check()
-        }
-
-        else{
+        } else {
             Dexter.withContext(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(object : PermissionListener {
                     override fun onPermissionGranted(response: PermissionGrantedResponse) {
                         imageChooser()
                     }
+
                     override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                        Toast.makeText(this@ChatActivity, "You have denied the storage permission. Enable it to select image from storage.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@ChatActivity,
+                            "You have denied the storage permission. Enable it to select image from storage.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+
                     override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest, token: PermissionToken) {
                         showRationalDialogForPermissions()
                     }
@@ -178,44 +205,21 @@ class ChatActivity : AppCompatActivity() {
         launchSomeActivity.launch(i)
     }
 
-    private var launchSomeActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == RESULT_OK) {
-
-            val data = result.data
-            if (data != null && data.data != null) {
-                val selectedImageUri = data.data
-
-                if (selectedImageUri != null) {
-                    showPopupToSendImageUsingUri(selectedImageUri)
-                }
-            }
-        }
-    }
-
-    private val startForResultToLoadImage =
+    private var launchSomeActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                try {
-                    val selectedImage: Uri? = result.data?.data
-                    if (selectedImage != null) {
-                        Toast.makeText(applicationContext, "Got IMG", Toast.LENGTH_SHORT).show()
-                        showPopupToSendImageUsingUri(selectedImage)
-                    } else {
-                        // From Camera code goes here.
-                        // Get the bitmap directly from camera
-                        result.data?.extras?.let {
+            if (result.resultCode == RESULT_OK) {
 
-                            val bitmap: Bitmap = result.data?.extras?.get("data") as Bitmap
+                val data = result.data
+                if (data != null && data.data != null) {
+                    val selectedImageUri = data.data
 
-                            showPopupToSendImageUsingBitmap(bitmap)
-                            Log.i("ImagePath", mImagePath)
-                        }
+                    if (selectedImageUri != null) {
+                        showPopupToSendImageUsingUri(selectedImageUri)
                     }
-                } catch (error: Exception) {
-                    Log.d("log==>>", "Error : ${error.localizedMessage}")
                 }
             }
         }
+
 
     private fun showRationalDialogForPermissions() {
         AlertDialog.Builder(this)
@@ -236,24 +240,22 @@ class ChatActivity : AppCompatActivity() {
     }
 
 
-    private fun showPopupToSendImageUsingBitmap(bitmap: Bitmap) {
-        mDialogToSendImage = Dialog(this)
-        val inflater = layoutInflater
-        val dialogLayoutInflater = inflater.inflate(R.layout.dialog_send_image, null)
-        mDialogToSendImage.setContentView(dialogLayoutInflater)
-        val imgToBeSent = mDialogToSendImage.findViewById<ImageView>(R.id.iv_this_img_will_be_sent)
-
-        imgToBeSent.setImageBitmap(bitmap)
-
-        mDialogToSendImage.show()
-    }
-
     private fun showPopupToSendImageUsingUri(selectedImage: Uri) {
         mDialogToSendImage = Dialog(this)
         val inflater = layoutInflater
         val dialogLayoutInflater = inflater.inflate(R.layout.dialog_send_image, null)
         mDialogToSendImage.setContentView(dialogLayoutInflater)
         val imgToBeSent = mDialogToSendImage.findViewById<ImageView>(R.id.iv_this_img_will_be_sent)
+
+        senderRoom = receiverUid + senderUid
+        receiverRoom = senderUid + receiverUid
+
+        val messageObject = MessageModel(Constants.IMAGE + selectedImage.toString(), senderUid)
+        dbRef.child("chats").child(senderRoom!!).child("messages").push() // Generating a new child location
+            .setValue(messageObject).addOnSuccessListener {
+                dbRef.child("chats").child(receiverRoom!!).child("messages").push().setValue(messageObject)
+            }
+
 
         imgToBeSent.setImageURI(selectedImage)
 

@@ -1,26 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_marginStart="@dimen/_70sdp"
+    android:background="@color/my_black"
     android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginRight="@dimen/_6sdp"
-        android:background="@drawable/sent_message_bg">
+        android:layout_marginEnd="@dimen/_6sdp">
 
-        <TextView
-            android:id="@+id/tv_sent_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/iv_sent_image"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_300sdp"
             android:padding="@dimen/_5sdp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_15sdp"
-            tools:text="Sent message" />
+             />
 
     </RelativeLayout>
 
