@@ -2,21 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_marginStart="@dimen/_40sdp"
+    android:layout_marginTop="@dimen/_6sdp"
+    android:layout_marginEnd="@dimen/_6sdp"
     android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginRight="@dimen/_6sdp"
+        android:layout_alignParentEnd="true"
         android:background="@drawable/sent_message_bg">
 
         <TextView
             android:id="@+id/tv_sent_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_5sdp"
+            android:padding="@dimen/_10sdp"
             android:textColor="@color/white"
             android:textSize="@dimen/_15sdp"
             tools:text="Sent message" />
