@@ -12,7 +12,7 @@
     <item
         android:id="@+id/show_memes"
         android:orderInCategory="100"
-        android:icon="@drawable/meme"
+        android:icon="@drawable/img_meme"
         app:showAsAction="ifRoom"
         android:title="show memes" />
     <item
