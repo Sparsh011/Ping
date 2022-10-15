@@ -10,7 +10,7 @@
 ## Libraries and API Used
 <ul>
 <li>Retrofit</li>
-<li>Intuit</li>
+<li>Intuit SDP Library</li>
 <li><a href="https://github.com/D3vd/Meme_Api">D3vd Meme API</a></li>
 </ul>
 
