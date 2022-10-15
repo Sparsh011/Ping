@@ -24,52 +24,48 @@ class MemesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memes)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Memes Center"
+        supportActionBar?.title = "Reddit Meme"
 
 //        Initialising views -
         rvMemes = findViewById(R.id.rv_memes)
         val progressBar: ProgressBar = findViewById(R.id.pb_loading_memes)
         val tvLoadingMemes: TextView = findViewById(R.id.tv_loading_memes)
 
+
+
 //        Instantiating variables -
-        var memesList : ArrayList<String>
-        val memesSet: HashSet<String> = HashSet()
+        val memesList : ArrayList<String> = ArrayList()
         memesAdapter = MemesAdapter(this)
         rvMemes.layoutManager = LinearLayoutManager(this)
 
-//        Fetching memes -
-        for (i in 0 .. 35){
-            lifecycleScope.launchWhenCreated {
-                progressBar.isVisible = true
-                tvLoadingMemes.isVisible = true
-                val response = try {
-                    ApiService.api.getMemes()
-                }
-                catch (e: IOException){
-                    Log.e("MainActivity", "IOException, You might not have internet connection!")
-                    Toast.makeText(this@MemesActivity, "You Might Not Have Internet Connection!", Toast.LENGTH_SHORT).show()
-                    progressBar.isVisible = false
-                    return@launchWhenCreated
-                }
 
-                if (response.isSuccessful && response.body() != null){
-                    memesSet.add(response.body()!!.url)
-                }
-                else Toast.makeText(this@MemesActivity, "Unable to fetch", Toast.LENGTH_SHORT).show()
 
-                if (i == 34){
-                    progressBar.isVisible = false
-                    tvLoadingMemes.isVisible = false
-
-//                    Populating data to recyclerView -
-                    rvMemes.visibility = View.VISIBLE
-                    memesList = memesSet.toList() as ArrayList<String>
-                    memesAdapter.memes = memesList
-                    rvMemes.adapter = memesAdapter
-                }
+//        Fetching Memes -
+        lifecycleScope.launchWhenCreated {
+            progressBar.isVisible = true
+            tvLoadingMemes.isVisible = true
+            val response = try {
+                ApiService.api.getMemes()
             }
+            catch (e: IOException){
+                Log.e("MainActivity", "IOException, You might not have internet connection!")
+                Toast.makeText(this@MemesActivity, "You Might Not Have Internet Connection!", Toast.LENGTH_SHORT).show()
+                progressBar.isVisible = false
+                return@launchWhenCreated
+            }
+
+            if (response.isSuccessful && response.body() != null){
+                rvMemes.visibility = View.VISIBLE
+                memesList.add(response.body()!!.url)
+                memesAdapter.memes = memesList
+                rvMemes.adapter = memesAdapter
+            }
+            else{
+                Toast.makeText(this@MemesActivity, "Unable To Fetch Meme", Toast.LENGTH_SHORT).show()
+            }
+
+            progressBar.isVisible = false
+            tvLoadingMemes.isVisible = false
         }
-//        Fetching multiple but problem is ki jb 2nd time load open kro activity tb ye s 3,4 memes hi load kr rha hai
-//        memesSet.clear()
     }
 }
