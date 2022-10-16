@@ -12,13 +12,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
+import com.example.ping.model.SavedMemeModel
 import com.example.ping.network.ApiService
 import com.example.ping.views.adapter.MemesAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class MemesActivity : AppCompatActivity() {
     private lateinit var rvMemes : RecyclerView
     private lateinit var memesAdapter: MemesAdapter
+    private lateinit var dbRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +44,9 @@ class MemesActivity : AppCompatActivity() {
 
 //        Instantiating variables -
         val memesList : ArrayList<String> = ArrayList()
-        memesAdapter = MemesAdapter(this)
+        memesAdapter = MemesAdapter(this, this)
         rvMemes.layoutManager = LinearLayoutManager(this)
+        dbRef = FirebaseDatabase.getInstance().reference
 
 
 
@@ -66,6 +76,28 @@ class MemesActivity : AppCompatActivity() {
 
             progressBar.isVisible = false
             tvLoadingMemes.isVisible = false
+        }
+    }
+
+    fun saveMemeToDatabase(memeUrl: String){
+        addUrlToDatabase(memeUrl)
+    }
+
+//    Come up with a unique childName for every memeUrl so that I can add multiple memes to database
+
+    private fun addUrlToDatabase(memeUrl: String) = CoroutineScope(Dispatchers.IO).launch{
+        try {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+            dbRef.child("savedMemes").child(uid!!).child("memes").child(memeUrl).setValue(SavedMemeModel(memeUrl))
+            withContext(Dispatchers.Main){
+                Toast.makeText(this@MemesActivity, "Meme Saved", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception){
+            withContext(Dispatchers.Main){
+                Toast.makeText(this@MemesActivity, "Unable To Save Meme, ${e.message.toString()}", Toast.LENGTH_SHORT).show()
+                Log.i("Unable to add meme", e.message.toString())
+            }
         }
     }
 }

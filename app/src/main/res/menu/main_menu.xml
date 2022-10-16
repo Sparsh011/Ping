@@ -18,6 +18,10 @@
     <item
         android:id="@+id/logout"
         app:showAsAction="never"
-        android:title="Logout"
+        android:title="Logout"/>
+    <item
+        android:id="@+id/show_saved_memes"
+        app:showAsAction="never"
+        android:title="Show Saved Memes"
         />
 </menu>

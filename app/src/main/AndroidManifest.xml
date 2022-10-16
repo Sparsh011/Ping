@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.ping">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,9 +16,12 @@
         android:theme="@style/Theme.Ping"
         tools:targetApi="31">
         <activity
-            android:name=".views.activity.MemesActivity"
-            android:parentActivityName=".views.activity.UsersActivity"
+            android:name=".views.activity.SavedMemesActivity"
             android:exported="false" />
+        <activity
+            android:name=".views.activity.MemesActivity"
+            android:exported="false"
+            android:parentActivityName=".views.activity.UsersActivity" />
         <activity
             android:name=".views.activity.ChatActivity"
             android:exported="false"

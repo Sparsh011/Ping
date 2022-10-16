@@ -94,6 +94,10 @@ class UsersActivity : AppCompatActivity() {
             R.id.show_memes -> {
                 startActivity(Intent(this@UsersActivity, MemesActivity::class.java))
             }
+
+            R.id.show_saved_memes ->{
+                startActivity(Intent(this@UsersActivity, SavedMemesActivity::class.java))
+            }
             else -> super.onOptionsItemSelected(item)
         }
         return true
