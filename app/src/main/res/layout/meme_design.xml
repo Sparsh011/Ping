@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:toosl="http://schemas.android.com/apk/res-auto"
+    android:background="@color/my_black"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
@@ -14,11 +16,30 @@
         android:layout_marginBottom="@dimen/_15sdp"
         tools:src="@color/my_grey" />
 
+    <TextView
+        android:id="@+id/tv_save_or_delete_meme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_meme"
+        android:layout_centerInParent="true"
+        android:textSize="@dimen/_15sdp"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:textColor="@color/white"
+        android:background="@drawable/save_meme_bg"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:padding="@dimen/_5sdp"/>
+
+
+
     <View
+        android:id="@+id/meme_separator"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
-        android:layout_below="@+id/iv_meme"
+        android:layout_below="@+id/tv_save_or_delete_meme"
         android:layout_marginStart="@dimen/_8sdp"
+        android:visibility="gone"
         android:layout_marginEnd="@dimen/_8sdp"
         android:background="@color/my_grey"/>
 
