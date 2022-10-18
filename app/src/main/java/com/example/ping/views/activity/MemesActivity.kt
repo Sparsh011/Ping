@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
-import com.example.ping.model.SavedMemeModel
 import com.example.ping.network.ApiService
 import com.example.ping.views.adapter.MemesAdapter
 import com.google.firebase.auth.FirebaseAuth
@@ -88,8 +87,8 @@ class MemesActivity : AppCompatActivity() {
     private fun addUrlToDatabase(memeUrl: String) = CoroutineScope(Dispatchers.IO).launch{
         try {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
-
-            dbRef.child("savedMemes").child(uid!!).child("memes").child(memeUrl).setValue(SavedMemeModel(memeUrl))
+            val child = encryptUrl(memeUrl)
+            dbRef.child("savedMemes").child(uid!!).child("memes").child(child).setValue(memeUrl)
             withContext(Dispatchers.Main){
                 Toast.makeText(this@MemesActivity, "Meme Saved", Toast.LENGTH_SHORT).show()
             }
@@ -99,5 +98,22 @@ class MemesActivity : AppCompatActivity() {
                 Log.i("Unable to add meme", e.message.toString())
             }
         }
+    }
+
+    private fun encryptUrl(url: String): String{
+        var string = ""
+
+        for (i in url.indices){
+            if (url[i] == '/'){
+                string += '!'
+            }
+            else if (url[i] == '.'){
+                string += '+'
+            }
+            else{
+                string += url[i]
+            }
+        }
+        return string
     }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -52,7 +53,12 @@ class MemesAdapter(
         }
         else{
             holder.saveOrDeleteMeme.text = "Remove From Saved"
-            holder.separator.visibility = View.VISIBLE
+            if (position == itemCount-1){
+                holder.separator.visibility = View.GONE
+            }
+            else{
+                holder.separator.visibility = View.VISIBLE
+            }
         }
 
         holder.saveOrDeleteMeme.setOnClickListener{
