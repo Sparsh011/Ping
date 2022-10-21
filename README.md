@@ -1,5 +1,5 @@
 # Ping
-<h4>A simple chatting application where users can share text messages with each other. Appliation also fetches a random meme from Reddit</h4>
+<h4>A simple chatting application where users can share text messages with each other. Appliation also fetches a random meme from Reddit and user can save that meme.</h4>
 
 ## Tech Stack
 <ul>
@@ -24,3 +24,6 @@
 <img align="left" alt="img" width="200" height="450" src="https://user-images.githubusercontent.com/93155464/195975095-816b17d0-30fc-4a50-be1e-b6513fa6ec10.jpg">
 <img align="left" alt="img" width="200" height="450" src="https://user-images.githubusercontent.com/93155464/195975000-91d6c538-41d7-4ccc-8c10-5190b8da682b.png">
 <img align="center" alt="img" width="200" height="450" src="https://user-images.githubusercontent.com/93155464/195974498-875d53cf-0e34-4bfd-bbbf-964d60ec8197.jpg">
+
+<img align="left" alt="img" width="200" height="450" src="https://user-images.githubusercontent.com/93155464/196994507-309ad5e2-b3d8-47be-8727-cf38a117e2f6.jpg">
+
