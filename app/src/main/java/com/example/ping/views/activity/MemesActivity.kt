@@ -88,10 +88,12 @@ class MemesActivity : AppCompatActivity() {
         try {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
             val child = encryptUrl(memeUrl)
+
             dbRef.child("savedMemes").child(uid!!).child("memes").child(child).setValue(memeUrl)
             withContext(Dispatchers.Main){
                 Toast.makeText(this@MemesActivity, "Meme Saved", Toast.LENGTH_SHORT).show()
             }
+
         } catch (e: Exception){
             withContext(Dispatchers.Main){
                 Toast.makeText(this@MemesActivity, "Unable To Save Meme, ${e.message.toString()}", Toast.LENGTH_SHORT).show()

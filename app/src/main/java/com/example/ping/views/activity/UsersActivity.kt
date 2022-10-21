@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +17,10 @@ import com.example.ping.model.User
 import com.example.ping.views.adapter.UsersAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UsersActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -22,6 +28,7 @@ class UsersActivity : AppCompatActivity() {
     private lateinit var usersList: ArrayList<User>
     private lateinit var adapter: UsersAdapter
     private lateinit var dbRef: DatabaseReference
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,29 +40,43 @@ class UsersActivity : AppCompatActivity() {
         adapter = UsersAdapter(this, usersList)
         usersRecyclerView = findViewById(R.id.rv_users)
         dbRef = FirebaseDatabase.getInstance().reference
+        progressBar = findViewById(R.id.pb_loading_users)
 
         usersRecyclerView.layoutManager = LinearLayoutManager(this)
         usersRecyclerView.adapter = adapter
 
-//        Retrieving chats from database -
-        dbRef.child("user").addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                usersList.clear()
-                for (item in snapshot.children){
-                    val currentUser = item.getValue(User::class.java)
-                    if (auth.currentUser?.uid != currentUser?.uid){
-                        usersList.add(currentUser!!)
+
+//        Loading Users from database -
+        loadUsers()
+    }
+
+
+    private fun loadUsers() = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            dbRef.child("user").addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    usersList.clear()
+                    for (item in snapshot.children){
+                        val currentUser = item.getValue(User::class.java)
+                        if (auth.currentUser?.uid != currentUser?.uid){
+                            usersList.add(currentUser!!)
+                        }
                     }
+
+                    progressBar.visibility = View.GONE
+                    usersRecyclerView.visibility = View.VISIBLE
+                    adapter.notifyDataSetChanged()
                 }
 
-                adapter.notifyDataSetChanged()
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+        } catch (e: Exception){
+            withContext(Dispatchers.Main){
+                Toast.makeText(this@UsersActivity, "Error loading chats -> ${e.message.toString()}", Toast.LENGTH_SHORT).show()
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
-
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
