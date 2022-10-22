@@ -53,36 +53,38 @@ class VerifyOTP : AppCompatActivity() {
         }
     }
 
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                mProgressBarOfOTPAuth.visibility = View.INVISIBLE
+                Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
+                val username = intent.getStringExtra("name")
+                val phoneNumber = intent.getStringExtra("number")
+                addUserToDatabase(username!!, phoneNumber!!, firebaseAuth.currentUser?.uid!!)
+                val intent = Intent(this@VerifyOTP, UsersActivity::class.java)
+                finish()
+                startActivity(intent)
+            } else {
+                if (task.exception is FirebaseAuthInvalidCredentialsException) {
                     mProgressBarOfOTPAuth.visibility = View.INVISIBLE
-                    Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
-                    val username = intent.getStringExtra("name")
-                    val phoneNumber = intent.getStringExtra("number")
-                    addUserToDatabase(username!!, phoneNumber!!, firebaseAuth.currentUser?.uid!!)
-                    val intent = Intent(this@VerifyOTP, UsersActivity::class.java)
-                    finish()
-                    startActivity(intent)
+                    Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show()
                 }
-                else {
-                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        mProgressBarOfOTPAuth.visibility = View.INVISIBLE
-                        Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun addUserToDatabase(name: String, number: String, uid: String){
-        dbRef = FirebaseDatabase.getInstance().reference
 
-        dbRef.child("user").child(uid).setValue(User(name, number, uid))
+
+    private fun addUserToDatabase(name: String, number: String, uid: String) = CoroutineScope(Dispatchers.IO).launch{
+        try {
+            dbRef = FirebaseDatabase.getInstance().reference
+            dbRef.child("user").child(uid).setValue(User(name, number, uid))
+        } catch (e: Exception){
+            withContext(Dispatchers.Main){
+                Toast.makeText(applicationContext, "Error -> ${e.message.toString()}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 }
