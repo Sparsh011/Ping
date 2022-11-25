@@ -1,5 +1,5 @@
 # Ping
-<h4>A simple chatting application where users can share text messages with each other. Appliation also fetches a random meme from Reddit and user can save that meme.</h4>
+<h4>A chatting application where users can share text messages with each other. Appliation also fetches a random meme from Reddit and user can save that meme.</h4>
 
 ## Tech Stack
 <ul>
