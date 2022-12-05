@@ -1,10 +1,10 @@
 # Ping
-<h4>A chatting application where users can share text messages with each other. Appliation also fetches a random meme from Reddit and user can save that meme.</h4>
+<h4>A chatting application where users can share text messages with each other. Appliation also fetches a random meme from Reddit and user can save that meme. \nNote:  As of 28 November 2022, Heroku has stopped offering free dynos, so the API used in this app doesn't work anymore. Screenshots attached below date back to the time when Heroku's dynos were free.</h4>
 
 ## Tech Stack
 <ul>
 <li>Kotlin</li>
-<li>Firebase Realtime Database(for saving data of users)</li>
+<li>Firebase Realtime Database(for saving data of users and memes)</li>
 </ul>
 
 ## Libraries and API Used
