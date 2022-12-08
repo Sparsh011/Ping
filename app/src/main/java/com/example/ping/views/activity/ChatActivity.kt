@@ -1,8 +1,10 @@
 package com.example.ping.views.activity
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
@@ -13,8 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
 import com.example.ping.model.MessageModel
 import com.example.ping.views.adapter.MessageAdapter
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +35,7 @@ class ChatActivity : AppCompatActivity() {
     private var senderRoom: String? = null
     private lateinit var dbRef: DatabaseReference
 //    private lateinit var ivMoreOptions: ImageView
+    private val TAG = "NotificationTag"
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +76,23 @@ class ChatActivity : AppCompatActivity() {
                 uploadChatsToDatabase(senderRoom!!, receiverRoom!!, messageObject)
                 message.setText("")
             }
+
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token = task.result
+
+                Log.i(TAG, "task successful, ${task.result}")
+
+//                // Log and toast
+//                val msg = getString(R.string.msg_token_fmt, token)
+//                Log.d(TAG, msg)
+//                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            })
         }
 
 
