@@ -7,9 +7,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
@@ -29,10 +32,12 @@ class UsersActivity : AppCompatActivity() {
     private lateinit var adapter: UsersAdapter
     private lateinit var dbRef: DatabaseReference
     private lateinit var progressBar: ProgressBar
+    private lateinit var etSearchContact: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
+        supportActionBar?.hide()
 
 //        Initialising fields -
         auth = FirebaseAuth.getInstance()
@@ -41,9 +46,14 @@ class UsersActivity : AppCompatActivity() {
         usersRecyclerView = findViewById(R.id.rv_users)
         dbRef = FirebaseDatabase.getInstance().reference
         progressBar = findViewById(R.id.pb_loading_users)
+        etSearchContact = findViewById(R.id.et_search_contact)
 
         usersRecyclerView.layoutManager = LinearLayoutManager(this)
         usersRecyclerView.adapter = adapter
+
+        etSearchContact.addTextChangedListener {
+            showFilteredList(it.toString())
+        }
 
 
 //        Loading Users from database -
@@ -79,28 +89,28 @@ class UsersActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.main_menu, menu)
-
-        val menuItem = menu?.findItem(R.id.search)
-        val searchView: SearchView = menuItem?.actionView as SearchView
-        searchView.queryHint = "Search Here..."
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                // Called when the user presses enter
-                return true
-            }
-
-            override fun onQueryTextChange(text: String?): Boolean {
-                showFilteredList(text)
-                return true
-            }
-        })
-
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        val inflater: MenuInflater = menuInflater
+//        inflater.inflate(R.menu.main_menu, menu)
+//
+//        val menuItem = menu?.findItem(R.id.search)
+//        val searchView: SearchView = menuItem?.actionView as SearchView
+//        searchView.queryHint = "Search Here..."
+//
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+//            override fun onQueryTextSubmit(p0: String?): Boolean {
+//                // Called when the user presses enter
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(text: String?): Boolean {
+//                showFilteredList(text)
+//                return true
+//            }
+//        })
+//
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){

@@ -15,25 +15,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ping"
         tools:targetApi="31">
+
         <activity
             android:name=".views.activity.SavedMemesActivity"
-            android:parentActivityName=".views.activity.UsersActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".views.activity.UsersActivity" />
+
         <activity
             android:name=".views.activity.MemesActivity"
             android:exported="false"
             android:parentActivityName=".views.activity.UsersActivity" />
+
         <activity
             android:name=".views.activity.ChatActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".views.activity.UsersActivity" />
+
         <activity
             android:name=".views.activity.UsersActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".views.activity.VerifyOTP"
             android:exported="false"
             android:theme="@style/Theme.Ping.NoActionBar" />
+
         <activity
             android:name=".views.activity.MainActivity"
             android:exported="true"
@@ -44,6 +52,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

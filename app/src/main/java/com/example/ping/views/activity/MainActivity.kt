@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.ping.R
@@ -32,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 //        Initialising views -
-        val btnSendOtp = findViewById<Button>(R.id.btn_send_otp)
+        val btnSendOtp = findViewById<TextView>(R.id.btn_send_otp)
         val etPhoneNumber = findViewById<EditText>(R.id.et_phone_number)
         val ccp = findViewById<CountryCodePicker>(R.id.btn_ccp)
         mProgressBar = findViewById(R.id.progressBar)

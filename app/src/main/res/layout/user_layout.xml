@@ -6,15 +6,16 @@
     android:paddingTop="@dimen/_16sdp"
     android:paddingStart="@dimen/_10sdp"
     android:paddingEnd="@dimen/_10sdp"
-    android:background="@color/my_black">
+    android:background="@drawable/rounded_users_box">
 
 
     <TextView
         android:id="@+id/tv_username"
         android:layout_width="wrap_content"
-        android:textSize="@dimen/_16sdp"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="#212835"
+        android:textSize="@dimen/_16sdp"
+        android:fontFamily="@font/lato"
         tools:text="Username" />
 
     <View
@@ -22,7 +23,7 @@
         android:layout_height="@dimen/_1sdp"
         android:layout_below="@+id/tv_username"
         android:layout_marginTop="@dimen/_8sdp"
-        android:background="@color/my_grey" />
+        android:background="#9CA7B1" />
 
 
 </RelativeLayout>

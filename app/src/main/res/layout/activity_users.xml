@@ -7,6 +7,83 @@
     android:background="@color/my_black"
     tools:context=".views.activity.UsersActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.17"
+        android:background="@color/my_black"
+        android:id="@+id/rl_toolbar"
+       >
+
+        <EditText
+            android:id="@+id/et_search_contact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/open_menu"
+            android:layout_margin="@dimen/_15sdp"
+            android:hint="Search"
+            android:background="@drawable/rounded_search_contacts_et"
+            android:drawableStart="@drawable/ic_baseline_search_24"
+            android:drawablePadding="@dimen/_7sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/my_black"
+            android:padding="@dimen/_6sdp"
+            android:textColorHint="@color/my_black"
+            app:layout_constraintEnd_toStartOf="@+id/open_menu"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/open_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_menu_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"/>
+
+        <TextView
+            android:id="@+id/btn_show_chats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.4"
+            android:text="Chats"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/et_search_contact"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="@dimen/_8sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/rl_toolbar"
+            android:background="@drawable/rounded_verify_button"/>
+
+        <TextView
+            android:id="@+id/btn_show_memes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.4"
+            android:text="Memes"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            app:layout_constraintTop_toBottomOf="@+id/et_search_contact"
+            android:padding="@dimen/_8sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/rl_toolbar"
+            android:background="@drawable/rounded_verify_button"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ProgressBar
         android:id="@+id/pb_loading_users"
         android:layout_width="wrap_content"
@@ -18,13 +95,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_users"
+    <LinearLayout
+        android:id="@+id/ll_users"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/user_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/rl_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/rounded_users_box"
+        app:layout_constraintHeight_percent="0.83"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_users"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:listitem="@layout/user_layout" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

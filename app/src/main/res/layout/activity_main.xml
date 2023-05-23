@@ -31,7 +31,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_chat_bubble_outline_24" />
+        app:srcCompat="@drawable/img" />
 
     <com.hbb20.CountryCodePicker
         android:id="@+id/btn_ccp"
@@ -57,20 +57,23 @@
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/et_name" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_send_otp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_40sdp"
         android:layout_marginTop="@dimen/_35sdp"
         android:layout_marginRight="@dimen/_40sdp"
-        android:backgroundTint="@color/my_orange"
-        android:padding="@dimen/_7sdp"
-        android:text="Send OTP"
+        android:background="@drawable/rounded_verify_button"
+        android:text="Verify"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:textColor="@color/my_black"
         android:textAllCaps="false"
         android:textSize="@dimen/_13sdp"
         app:layout_constraintEnd_toEndOf="@+id/et_phone_number"
         app:layout_constraintStart_toEndOf="@+id/btn_ccp"
+        app:layout_constraintWidth_percent="0.5"
         app:layout_constraintTop_toBottomOf="@+id/et_phone_number" />
 
     <ProgressBar
