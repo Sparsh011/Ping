@@ -50,7 +50,7 @@ class MemesActivity : AppCompatActivity() {
 
 
 //        Fetching Memes -
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             progressBar.isVisible = true
             tvLoadingMemes.isVisible = true
             val response = try {
@@ -60,7 +60,7 @@ class MemesActivity : AppCompatActivity() {
                 Log.e("MainActivity", "IOException, You might not have internet connection!")
                 Toast.makeText(this@MemesActivity, "You Might Not Have Internet Connection!", Toast.LENGTH_SHORT).show()
                 progressBar.isVisible = false
-                return@launchWhenCreated
+                return@launch
             }
 
             if (response.isSuccessful && response.body() != null){

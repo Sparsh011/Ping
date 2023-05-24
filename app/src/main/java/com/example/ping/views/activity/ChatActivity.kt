@@ -1,13 +1,13 @@
 package com.example.ping.views.activity
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
@@ -38,6 +38,9 @@ class ChatActivity : AppCompatActivity() {
 
         val name = intent.getStringExtra("nameOfUser")
         val receiverUid = intent.getStringExtra("uid")
+        val toolbar : Toolbar = findViewById(R.id.chat_toolbar)
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24)
+        setSupportActionBar(toolbar)
         supportActionBar?.title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -56,6 +59,7 @@ class ChatActivity : AppCompatActivity() {
         messageList = ArrayList()
         messageAdapter = MessageAdapter(this, messageList)
         val messagesLayoutManager = LinearLayoutManager(this)
+        messagesLayoutManager.stackFromEnd = true
         customChatRecyclerView.layoutManager = messagesLayoutManager
         customChatRecyclerView.adapter = messageAdapter
 //        ivMoreOptions = findViewById(R.id.iv_more_options)
@@ -72,9 +76,17 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        customChatRecyclerView.isNestedScrollingEnabled = false
+
 
 //        Adding data to recyclerView -
         populateChatsToRecyclerView(senderRoom!!)
+
+        customChatRecyclerView.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            customChatRecyclerView.scrollToPosition(
+                messageList.size - 1
+            )
+        }
 
     }
 

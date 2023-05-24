@@ -38,12 +38,13 @@
         <ImageView
             android:id="@+id/open_menu"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_menu_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_15sdp"/>
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:src="@drawable/baseline_menu_24"
+            app:layout_constraintBottom_toBottomOf="@+id/et_search_contact"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/btn_show_chats"
@@ -55,8 +56,8 @@
             app:layout_constraintTop_toBottomOf="@+id/et_search_contact"
             android:textColor="@color/black"
             android:gravity="center"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:layout_marginBottom="@dimen/_9sdp"
             android:layout_marginStart="@dimen/_15sdp"
             app:layout_constraintStart_toStartOf="parent"
             android:padding="@dimen/_8sdp"
@@ -72,8 +73,8 @@
             android:textColor="@color/black"
             android:gravity="center"
             android:textStyle="bold"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:layout_marginBottom="@dimen/_9sdp"
             android:layout_marginEnd="@dimen/_15sdp"
             app:layout_constraintTop_toBottomOf="@+id/et_search_contact"
             android:padding="@dimen/_8sdp"

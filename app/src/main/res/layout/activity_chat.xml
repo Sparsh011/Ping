@@ -1,60 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/my_black"
+    android:background="@drawable/chat_background"
     tools:context=".views.activity.ChatActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/chat_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/my_black"
+        app:titleTextColor="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_custom_chat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        app:layout_constraintHorizontal_bias="0.5"
-         />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/scroll_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chat_toolbar" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_alignParentBottom="true"
+    <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:weightSum="100">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:isScrollContainer="false"
+        >
 
-<!--        <ImageView-->
-<!--            android:id="@+id/iv_more_options"-->
-<!--            android:layout_width="@dimen/_35sdp"-->
-<!--            android:layout_height="@dimen/_40sdp"-->
-<!--            android:src="@drawable/ic_baseline_add_24"-->
-<!--            />-->
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_45sdp"
-            android:id="@+id/et_message"
-            android:inputType="textCapSentences"
-            android:layout_weight="85"
-            android:hint="Message..."
-            android:paddingStart="@dimen/_8sdp"
-            android:paddingEnd="@dimen/_1sdp"
-            android:textColor="@color/white"
-            android:background="@drawable/message_bg"
-            android:textColorHint="@color/my_grey"
-            />
-
-        <ImageView
-            android:id="@+id/img_send_message"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_45sdp"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:orientation="horizontal"
             android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_baseline_send_24"
-            android:layout_weight="15"/>
+            android:weightSum="100">
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/et_message"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_weight="85"
+                android:background="@drawable/message_bg"
+                android:hint="Message..."
+                android:inputType="textCapSentences"
+                android:paddingStart="@dimen/_8sdp"
+                android:paddingEnd="@dimen/_1sdp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/my_grey" />
 
-</RelativeLayout>
+            <ImageView
+                android:id="@+id/img_send_message"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_weight="15"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_baseline_send_24" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

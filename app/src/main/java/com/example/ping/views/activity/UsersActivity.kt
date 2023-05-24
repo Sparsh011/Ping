@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
@@ -33,6 +34,7 @@ class UsersActivity : AppCompatActivity() {
     private lateinit var dbRef: DatabaseReference
     private lateinit var progressBar: ProgressBar
     private lateinit var etSearchContact: EditText
+    private lateinit var showMemes: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,10 @@ class UsersActivity : AppCompatActivity() {
         dbRef = FirebaseDatabase.getInstance().reference
         progressBar = findViewById(R.id.pb_loading_users)
         etSearchContact = findViewById(R.id.et_search_contact)
+        showMemes = findViewById(R.id.btn_show_memes)
+        showMemes.setOnClickListener{
+            startActivity(Intent(this, MemesActivity::class.java))
+        }
 
         usersRecyclerView.layoutManager = LinearLayoutManager(this)
         usersRecyclerView.adapter = adapter
