@@ -17,7 +17,47 @@
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/user_dp_in_chat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/sent_message_bg"
+            app:cardCornerRadius="@dimen/_20sdp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_name"
+                android:text="Hello Ji"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13sdp"
+                android:fontFamily="@font/lato"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:id="@+id/chatting_with_user_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Offline"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_7sdp"
+                android:fontFamily="@font/lato"
+                android:textStyle="italic"/>
+
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
 
     <androidx.recyclerview.widget.RecyclerView

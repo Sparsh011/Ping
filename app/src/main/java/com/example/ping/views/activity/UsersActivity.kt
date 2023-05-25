@@ -1,19 +1,16 @@
 package com.example.ping.views.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
@@ -21,7 +18,6 @@ import com.example.ping.model.User
 import com.example.ping.views.adapter.UsersAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -64,33 +60,52 @@ class UsersActivity : AppCompatActivity() {
 
 //        Loading Users from database -
         loadUsers()
+        changeActiveStatus(true)
     }
 
+    private fun changeActiveStatus(status: Boolean) {
+        val firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth.currentUser?.uid?.let { uid ->
+            dbRef.child("activeStatus").child(uid).setValue(status)
+        }
+    }
 
-    private fun loadUsers() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            dbRef.child("user").addValueEventListener(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    usersList.clear()
-                    for (item in snapshot.children){
-                        val currentUser = item.getValue(User::class.java)
-                        if (auth.currentUser?.uid != currentUser?.uid){
-                            usersList.add(currentUser!!)
+    override fun onStop() {
+        super.onStop()
+        changeActiveStatus(false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        changeActiveStatus(true)
+    }
+
+    private fun loadUsers() {
+        lifecycleScope.launch(Dispatchers.IO){
+            try {
+                dbRef.child("user").addValueEventListener(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        usersList.clear()
+                        for (item in snapshot.children){
+                            val currentUser = item.getValue(User::class.java)
+                            if (auth.currentUser?.uid != currentUser?.uid){
+                                usersList.add(currentUser!!)
+                            }
                         }
+
+                        progressBar.visibility = View.GONE
+                        usersRecyclerView.visibility = View.VISIBLE
+                        adapter.notifyDataSetChanged()
                     }
 
-                    progressBar.visibility = View.GONE
-                    usersRecyclerView.visibility = View.VISIBLE
-                    adapter.notifyDataSetChanged()
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })
+            } catch (e: Exception){
+                withContext(Dispatchers.Main){
+                    Toast.makeText(this@UsersActivity, "Error loading chats -> ${e.message.toString()}", Toast.LENGTH_SHORT).show()
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-        } catch (e: Exception){
-            withContext(Dispatchers.Main){
-                Toast.makeText(this@UsersActivity, "Error loading chats -> ${e.message.toString()}", Toast.LENGTH_SHORT).show()
             }
         }
     }
