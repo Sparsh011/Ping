@@ -1,7 +1,10 @@
 package com.example.ping.views.activity
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -67,6 +70,8 @@ class ChatActivity : AppCompatActivity() {
             }
         })
 
+        dbRef.child("activeStatus").child(receiverUid).onDisconnect().setValue(false)
+
 
         val senderUid = FirebaseAuth.getInstance().currentUser?.uid
         senderRoom = receiverUid + senderUid
@@ -111,25 +116,9 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (receiverUid != null) {
-            dbRef.child("activeStatus").child(receiverUid).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val status = snapshot.getValue<Boolean>()
-                    if (status == true) {
-                        chattingWithUserStatus.text = "Online"
-                    } else {
-                        chattingWithUserStatus.text = "Offline"
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
-        }
+    override fun onStart() {
+        super.onStart()
+        changeActiveStatus(true)
     }
 
 
@@ -160,6 +149,41 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+//        val isMyAppRunning = isAppRunning(this, "com.example.ping")
+//        if (!isMyAppRunning) {
+//            // App is still running
+//            changeActiveStatus(false)
+//        }
+    }
+
+    private fun changeActiveStatus(status: Boolean) {
+        val firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth.currentUser?.uid?.let { uid ->
+            dbRef.child("activeStatus").child(uid).setValue(status)
+        }
+    }
+
+    private fun isAppRunning(context: Context, packageName: String): Boolean {
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+        // Get the list of running processes
+        val runningProcesses = activityManager.runningAppProcesses
+
+        // Iterate through the running processes to check if the app is in the foreground
+        if (runningProcesses != null) {
+            for (processInfo in runningProcesses) {
+                if (processInfo.processName == packageName && processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    Log.d("Called", "isAppRunning: process alive")
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
 

@@ -1,7 +1,10 @@
 package com.example.ping.views.activity
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
@@ -58,6 +61,7 @@ class UsersActivity : AppCompatActivity() {
         }
 
 
+        Log.d("UserAct me", "onCreate: Here")
 //        Loading Users from database -
         loadUsers()
         changeActiveStatus(true)
@@ -72,7 +76,29 @@ class UsersActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        changeActiveStatus(false)
+//        val isMyAppRunning = isAppRunning(this, "com.example.ping")
+//        if (!isMyAppRunning) {
+//            // App is still running
+//            changeActiveStatus(false)
+//        }
+    }
+
+    private fun isAppRunning(context: Context, packageName: String): Boolean {
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+        // Get the list of running processes
+        val runningProcesses = activityManager.runningAppProcesses
+
+        // Iterate through the running processes to check if the app is in the foreground
+        if (runningProcesses != null) {
+            for (processInfo in runningProcesses) {
+                if (processInfo.processName == packageName && processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
     override fun onResume() {

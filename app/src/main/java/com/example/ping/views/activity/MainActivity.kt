@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.ping.R
+import com.example.ping.services.OnClearFromRecentService
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.hbb20.CountryCodePicker
@@ -35,6 +36,9 @@ class MainActivity : AppCompatActivity() {
         mProgressBar = findViewById(R.id.progressBar)
         val etUsername = findViewById<EditText>(R.id.et_name)
         var countryCode = ccp.selectedCountryCodeWithPlus
+
+        startService(Intent(baseContext, OnClearFromRecentService::class.java))
+
 
 //        if country is changed -
         ccp.setOnCountryChangeListener {
