@@ -153,11 +153,11 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-//        val isMyAppRunning = isAppRunning(this, "com.example.ping")
-//        if (!isMyAppRunning) {
-//            // App is still running
-//            changeActiveStatus(false)
-//        }
+        val isMyAppRunning = isAppRunning(this, "com.example.ping")
+        if (!isMyAppRunning) {
+            // App is still running
+            changeActiveStatus(false)
+        }
     }
 
     private fun changeActiveStatus(status: Boolean) {

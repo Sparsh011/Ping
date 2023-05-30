@@ -8,6 +8,7 @@
 
 
     <application
+        android:name=".application.PingApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,8 +19,8 @@
         android:theme="@style/Theme.Ping"
         tools:targetApi="31">
 
-        <service android:name=".services.OnClearFromRecentService"
-            android:stopWithTask="false"/>
+<!--        <service android:name=".services.OnClearFromRecentService"-->
+<!--            android:stopWithTask="false"/>-->
 
         <activity
             android:name=".views.activity.SavedMemesActivity"

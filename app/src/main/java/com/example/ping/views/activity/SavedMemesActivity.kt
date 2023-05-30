@@ -63,7 +63,7 @@ class SavedMemesActivity : AppCompatActivity() {
 
                     pbLoadingSavedMemes.visibility = View.GONE
                     Log.i("MemesList ->", memesList.toString())
-                    memesAdapter.memes = memesList
+                    memesAdapter.savedMemes = memesList
                     memesAdapter.notifyDataSetChanged()
 
                 }

@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.ping"
-        minSdk 21
-        targetSdk 32
+        minSdk 24
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -71,4 +71,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 
     implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0'
+
+
+    implementation 'com.github.Sparsh011:memes-lib:1.2'
+
+//    Zoom in and Zoom out image -
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
 }

@@ -6,22 +6,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.meme_lib.network.Meme
 import com.example.ping.R
 import com.example.ping.views.activity.MemesActivity
 import com.example.ping.views.activity.SavedMemesActivity
+import com.github.chrisbanes.photoview.PhotoView
 
 class MemesAdapter(
     private val context: Context,
     private val activity: Activity
 ) : RecyclerView.Adapter<MemesAdapter.MemeViewHolder>() {
 
-    private val diffCallBack = object : DiffUtil.ItemCallback<String>(){
+    private val diffCallBack = object : DiffUtil.ItemCallback<Meme>(){
+        override fun areItemsTheSame(oldItem: Meme, newItem: Meme): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Meme, newItem: Meme): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+    private val diffCallBack2 = object : DiffUtil.ItemCallback<String>() {
         override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem
         }
@@ -29,11 +41,17 @@ class MemesAdapter(
         override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem
         }
-
     }
+
+    private val differ2 = AsyncListDiffer(this, diffCallBack2)
+    var savedMemes : List<String>
+    get() = differ2.currentList
+    set(value){differ2.submitList(value)}
+
+
     private val differ = AsyncListDiffer(this, diffCallBack)
 
-    var memes: List<String>
+    var memes: List<Meme>
     get() = differ.currentList
     set(value){differ.submitList((value))}
 
@@ -44,12 +62,13 @@ class MemesAdapter(
 
     override fun onBindViewHolder(holder: MemeViewHolder, position: Int) {
         Glide.with(context)
-            .load(memes[position])
+            .load(memes[position].url)
+            .override(com.bumptech.glide.request.target.Target.SIZE_ORIGINAL)
             .into(holder.ivMeme)
 
         if (activity is MemesActivity){
             holder.saveOrDeleteMeme.text = "Save Meme"
-            holder.separator.visibility = View.GONE
+            holder.separator.visibility = View.VISIBLE
         }
         else{
             holder.saveOrDeleteMeme.text = "Remove From Saved"
@@ -63,10 +82,10 @@ class MemesAdapter(
 
         holder.saveOrDeleteMeme.setOnClickListener{
             if (activity is MemesActivity){
-                activity.saveMemeToDatabase(memes[position])
+                activity.saveMemeToDatabase(memes[position].url)
             }
             else if (activity is SavedMemesActivity){
-                activity.deleteMeme(memes[position])
+                activity.deleteMeme(memes[position].url)
             }
         }
     }
