@@ -38,7 +38,6 @@ class SavedMemesActivity : AppCompatActivity() {
         memesList = ArrayList()
         memesAdapter = MemesAdapter(this, this)
         rvSavedMemes.layoutManager = LinearLayoutManager(this)
-        rvSavedMemes.adapter = memesAdapter
         dbRef = FirebaseDatabase.getInstance().reference
         showSavedMemes()
 
@@ -64,6 +63,7 @@ class SavedMemesActivity : AppCompatActivity() {
                     pbLoadingSavedMemes.visibility = View.GONE
                     Log.i("MemesList ->", memesList.toString())
                     memesAdapter.savedMemes = memesList
+                    rvSavedMemes.adapter = memesAdapter
                     memesAdapter.notifyDataSetChanged()
 
                 }

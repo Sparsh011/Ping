@@ -15,12 +15,12 @@ import com.example.meme_lib.network.Meme
 import com.example.ping.R
 import com.example.ping.views.activity.MemesActivity
 import com.example.ping.views.activity.SavedMemesActivity
-import com.github.chrisbanes.photoview.PhotoView
 
 class MemesAdapter(
     private val context: Context,
     private val activity: Activity
 ) : RecyclerView.Adapter<MemesAdapter.MemeViewHolder>() {
+    private val TAG = "MemesAdapter"
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Meme>(){
         override fun areItemsTheSame(oldItem: Meme, newItem: Meme): Boolean {
@@ -61,23 +61,22 @@ class MemesAdapter(
     }
 
     override fun onBindViewHolder(holder: MemeViewHolder, position: Int) {
-        Glide.with(context)
-            .load(memes[position].url)
-            .override(com.bumptech.glide.request.target.Target.SIZE_ORIGINAL)
-            .into(holder.ivMeme)
-
         if (activity is MemesActivity){
-            holder.saveOrDeleteMeme.text = "Save Meme"
+            holder.saveOrDeleteMeme.text = "Save "
             holder.separator.visibility = View.VISIBLE
+            Glide.with(context)
+                .load(memes[position].preview[memes[position].preview.size - 1])
+                .override(com.bumptech.glide.request.target.Target.SIZE_ORIGINAL)
+                .fitCenter()
+                .into(holder.ivMeme)
         }
         else{
-            holder.saveOrDeleteMeme.text = "Remove From Saved"
-            if (position == itemCount-1){
-                holder.separator.visibility = View.GONE
-            }
-            else{
-                holder.separator.visibility = View.VISIBLE
-            }
+            Glide.with(context)
+                .load(savedMemes[position])
+                .override(com.bumptech.glide.request.target.Target.SIZE_ORIGINAL)
+                .fitCenter()
+                .into(holder.ivMeme)
+            holder.saveOrDeleteMeme.text = "Remove"
         }
 
         holder.saveOrDeleteMeme.setOnClickListener{
@@ -85,13 +84,14 @@ class MemesAdapter(
                 activity.saveMemeToDatabase(memes[position].url)
             }
             else if (activity is SavedMemesActivity){
-                activity.deleteMeme(memes[position].url)
+                activity.deleteMeme(savedMemes[position])
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return memes.size
+        return if (activity is MemesActivity) memes.size
+        else savedMemes.size
     }
 
     inner class MemeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){

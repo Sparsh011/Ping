@@ -8,10 +8,13 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,13 +37,18 @@ class UsersActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var etSearchContact: EditText
     private lateinit var showMemes: TextView
+    private lateinit var btnOpenMenu: ImageView
+    private val TAG = "UsersActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
         supportActionBar?.hide()
+        window.statusBarColor = ContextCompat.getColor(this, R.color.my_black)
+
 
 //        Initialising fields -
+        btnOpenMenu = findViewById(R.id.open_menu)
         auth = FirebaseAuth.getInstance()
         usersList = ArrayList()
         adapter = UsersAdapter(this, usersList)
@@ -60,10 +68,39 @@ class UsersActivity : AppCompatActivity() {
             showFilteredList(it.toString())
         }
 
+        btnOpenMenu.setOnClickListener{
+            showPopup(btnOpenMenu)
+        }
+
 
 //        Loading Users from database -
         loadUsers()
         changeActiveStatus(true)
+    }
+
+    private fun showPopup(view: View) {
+        val popup = PopupMenu(this, view)
+        popup.inflate(R.menu.main_menu)
+
+        popup.setOnMenuItemClickListener { item: MenuItem? ->
+            when (item!!.itemId) {
+                R.id.logout -> {
+                    auth = FirebaseAuth.getInstance()
+                    auth.signOut()
+                    Toast.makeText(applicationContext, "Logged Out", Toast.LENGTH_SHORT).show()
+                    finish()
+                    startActivity(Intent(this@UsersActivity, MainActivity::class.java))
+
+                }
+                R.id.show_saved_memes -> {
+                    startActivity(Intent(this, SavedMemesActivity::class.java))
+                }
+            }
+
+            true
+        }
+
+        popup.show()
     }
 
     private fun changeActiveStatus(status: Boolean) {
@@ -133,51 +170,6 @@ class UsersActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        val inflater: MenuInflater = menuInflater
-//        inflater.inflate(R.menu.main_menu, menu)
-//
-//        val menuItem = menu?.findItem(R.id.search)
-//        val searchView: SearchView = menuItem?.actionView as SearchView
-//        searchView.queryHint = "Search Here..."
-//
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(p0: String?): Boolean {
-//                // Called when the user presses enter
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(text: String?): Boolean {
-//                showFilteredList(text)
-//                return true
-//            }
-//        })
-//
-//        return true
-//    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.logout -> {
-                auth = FirebaseAuth.getInstance()
-                auth.signOut()
-                Toast.makeText(applicationContext, "Logged Out", Toast.LENGTH_SHORT).show()
-                finish()
-                startActivity(Intent(this@UsersActivity, MainActivity::class.java))
-                return true
-            }
-            R.id.show_memes -> {
-                startActivity(Intent(this@UsersActivity, MemesActivity::class.java))
-            }
-
-            R.id.show_saved_memes ->{
-                startActivity(Intent(this@UsersActivity, SavedMemesActivity::class.java))
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-        return true
     }
 
     private fun showFilteredList(initials: String?){

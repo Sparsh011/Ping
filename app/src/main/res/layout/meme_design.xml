@@ -1,35 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/my_black"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/iv_meme"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_300sdp"
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_15sdp"
-        android:layout_marginBottom="@dimen/_15sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="70"
         tools:src="@color/my_grey" />
 
-    <TextView
-        android:id="@+id/tv_save_or_delete_meme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_meme"
-        android:layout_centerInParent="true"
-        android:textSize="@dimen/_14sdp"
-        android:fontFamily="@font/lato"
-        android:gravity="center"
-        android:layout_marginStart="@dimen/_25sdp"
-        android:layout_marginEnd="@dimen/_25sdp"
-        android:textColor="@color/my_black"
-        android:background="@drawable/rounded_verify_button"
-        android:layout_marginBottom="@dimen/_5sdp"
-        android:padding="@dimen/_5sdp"/>
+   <LinearLayout
+       android:id="@+id/ll_meme_operations"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       app:layout_constraintTop_toBottomOf="@+id/iv_meme"
+       app:layout_constraintStart_toStartOf="@+id/iv_meme"
+       app:layout_constraintEnd_toEndOf="@+id/iv_meme"
+       android:layout_marginTop="@dimen/_15sdp"
+       android:layout_marginBottom="@dimen/_5sdp"
+       android:weightSum="3"
+       >
+
+       <TextView
+           android:id="@+id/tv_save_or_delete_meme"
+           android:layout_width="0dp"
+           android:layout_height="@dimen/_30sdp"
+           android:layout_weight="1"
+           android:textSize="@dimen/_12sdp"
+           android:fontFamily="@font/lato"
+           android:gravity="center"
+           android:textStyle="bold"
+           android:layout_marginStart="@dimen/_10sdp"
+           android:layout_marginEnd="@dimen/_5sdp"
+           android:textColor="@color/my_black"
+           android:background="@drawable/rounded_verify_button"
+           android:padding="@dimen/_8sdp"/>
+
+       <TextView
+           android:id="@+id/tv_download"
+           android:layout_width="0dp"
+           android:layout_height="@dimen/_30sdp"
+           android:layout_weight="1"
+           android:textSize="@dimen/_12sdp"
+           android:fontFamily="@font/lato"
+           android:text="Download"
+           android:gravity="center"
+           android:textStyle="bold"
+           android:layout_marginStart="@dimen/_5sdp"
+           android:layout_marginEnd="@dimen/_5sdp"
+           android:textColor="@color/my_black"
+           android:background="@drawable/rounded_verify_button"
+           android:padding="@dimen/_8sdp"/>
+
+       <TextView
+           android:id="@+id/tv_share"
+           android:layout_width="0dp"
+           android:layout_height="@dimen/_30sdp"
+           android:layout_weight="1"
+           android:textSize="@dimen/_12sdp"
+           android:fontFamily="@font/lato"
+           android:text="Share"
+           android:gravity="center"
+           android:textStyle="bold"
+           android:layout_marginStart="@dimen/_5sdp"
+           android:layout_marginEnd="@dimen/_10sdp"
+           android:textColor="@color/my_black"
+           android:background="@drawable/rounded_verify_button"
+           android:padding="@dimen/_8sdp"/>
+
+   </LinearLayout>
 
 
 
@@ -37,12 +87,16 @@
         android:id="@+id/meme_separator"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
-        android:layout_below="@+id/tv_save_or_delete_meme"
+        android:layout_below="@+id/ll_meme_operations"
         android:layout_marginStart="@dimen/_8sdp"
         android:visibility="visible"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        app:layout_constraintTop_toBottomOf="@+id/ll_meme_operations"
+        app:layout_constraintStart_toStartOf="@+id/ll_meme_operations"
+        app:layout_constraintEnd_toEndOf="@+id/ll_meme_operations"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/my_grey"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

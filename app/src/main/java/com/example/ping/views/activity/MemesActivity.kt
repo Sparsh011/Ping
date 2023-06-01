@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meme_lib.network.Meme
@@ -27,12 +28,14 @@ class MemesActivity : AppCompatActivity() {
     private lateinit var rvMemes : RecyclerView
     private lateinit var memesAdapter: MemesAdapter
     private lateinit var dbRef: DatabaseReference
+    private val TAG = "MemesActivityTag"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memes)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Reddit Meme"
+        window.statusBarColor = ContextCompat.getColor(this, R.color.my_black)
 
 //        Initialising views -
         rvMemes = findViewById(R.id.rv_memes)
@@ -53,6 +56,7 @@ class MemesActivity : AppCompatActivity() {
                 val memes = response.memes
                 rvMemes.visibility = View.VISIBLE
                 memesList.addAll(memes)
+                Log.d(TAG, "onCreate: $memes")
                 memesAdapter.memes = memes
                 rvMemes.adapter = memesAdapter
                 progressBar.visibility = View.GONE

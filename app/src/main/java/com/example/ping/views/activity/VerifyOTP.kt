@@ -10,6 +10,7 @@ import com.example.ping.model.User
 import com.google.firebase.auth.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.mukeshsolanki.OtpView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,9 +18,7 @@ import kotlinx.coroutines.withContext
 
 class VerifyOTP : AppCompatActivity() {
     private lateinit var mChangeNumber: TextView
-    private lateinit var mGetOtp: EditText
-    private lateinit var mVerifyOTP: Button
-    private lateinit var enteredOTP: String
+    private lateinit var mGetOtp: OtpView
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var mProgressBarOfOTPAuth: ProgressBar
     private lateinit var dbRef: DatabaseReference
@@ -30,8 +29,7 @@ class VerifyOTP : AppCompatActivity() {
 
 //        Initialising views -
         mChangeNumber = findViewById(R.id.changeNumber)
-        mVerifyOTP = findViewById(R.id.verifyOTP)
-        mGetOtp = findViewById(R.id.getOTP)
+        mGetOtp = findViewById(R.id.otp_view)
         mProgressBarOfOTPAuth = findViewById(R.id.progressBarOfOTPAuthenticationActivity)
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -40,16 +38,11 @@ class VerifyOTP : AppCompatActivity() {
             startActivity(intent)
         }
 
-        mVerifyOTP.setOnClickListener {
-            enteredOTP = mGetOtp.text.toString()
-            if (enteredOTP.trim { it <= ' ' }.isEmpty()) {
-                Toast.makeText(this, "Enter OTP!", Toast.LENGTH_SHORT).show()
-            } else {
-                mProgressBarOfOTPAuth.visibility = View.VISIBLE
+        mGetOtp.setOtpCompletionListener { otp ->
+            mProgressBarOfOTPAuth.visibility = View.VISIBLE
                 val codeReceived = intent.getStringExtra("otp")
-                val credential = PhoneAuthProvider.getCredential(codeReceived!!, enteredOTP)
+                val credential = PhoneAuthProvider.getCredential(codeReceived!!, otp)
                 signInWithPhoneAuthCredential(credential)
-            }
         }
     }
 
@@ -79,7 +72,7 @@ class VerifyOTP : AppCompatActivity() {
     private fun addUserToDatabase(name: String, number: String, uid: String) = CoroutineScope(Dispatchers.IO).launch{
         try {
             dbRef = FirebaseDatabase.getInstance().reference
-            dbRef.child("user").child(uid).setValue(User(name, number, uid))
+            dbRef.child("user").child(uid).setValue(User(name, number, uid, "hello"))
         } catch (e: Exception){
             withContext(Dispatchers.Main){
                 Toast.makeText(applicationContext, "Error -> ${e.message.toString()}", Toast.LENGTH_SHORT).show()
