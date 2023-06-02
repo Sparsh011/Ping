@@ -1,5 +1,6 @@
 package com.example.ping.views.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,15 +35,17 @@ class MemesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memes)
+        val chatToolbar: Toolbar = findViewById(R.id.memes_toolbar)
+        chatToolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24)
+        setSupportActionBar(chatToolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Reddit Meme"
         window.statusBarColor = ContextCompat.getColor(this, R.color.my_black)
 
 //        Initialising views -
         rvMemes = findViewById(R.id.rv_memes)
         val progressBar: ProgressBar = findViewById(R.id.pb_loading_memes)
         val tvLoadingMemes: TextView = findViewById(R.id.tv_loading_memes)
-
 
 
 //        Instantiating variables -
@@ -56,7 +60,6 @@ class MemesActivity : AppCompatActivity() {
                 val memes = response.memes
                 rvMemes.visibility = View.VISIBLE
                 memesList.addAll(memes)
-                Log.d(TAG, "onCreate: $memes")
                 memesAdapter.memes = memes
                 rvMemes.adapter = memesAdapter
                 progressBar.visibility = View.GONE
@@ -69,35 +72,17 @@ class MemesActivity : AppCompatActivity() {
                 tvLoadingMemes.visibility = View.GONE
             }
         }
+    }
 
+    fun shareMeme(url: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, url)
+            type = "text/plain"
+        }
 
-//        Fetching Memes -
-//        lifecycleScope.launch {
-//            progressBar.isVisible = true
-//            tvLoadingMemes.isVisible = true
-//            val response = try {
-//                ApiService.api.getMemes()
-//            }
-//            catch (e: IOException){
-//                Log.e("MainActivity", "IOException, You might not have internet connection!")
-//                Toast.makeText(this@MemesActivity, "You Might Not Have Internet Connection!", Toast.LENGTH_SHORT).show()
-//                progressBar.isVisible = false
-//                return@launch
-//            }
-//
-//            if (response.isSuccessful && response.body() != null){
-//                rvMemes.visibility = View.VISIBLE
-//                memesList.add(response.body()!!.url)
-//                memesAdapter.memes = memesList
-//                rvMemes.adapter = memesAdapter
-//            }
-//            else{
-//                Toast.makeText(this@MemesActivity, "Unable To Fetch Meme", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            progressBar.isVisible = false
-//            tvLoadingMemes.isVisible = false
-//        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
     fun saveMemeToDatabase(memeUrl: String){

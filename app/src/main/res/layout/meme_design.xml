@@ -48,7 +48,7 @@
            android:padding="@dimen/_8sdp"/>
 
        <TextView
-           android:id="@+id/tv_download"
+           android:id="@+id/tv_download_meme"
            android:layout_width="0dp"
            android:layout_height="@dimen/_30sdp"
            android:layout_weight="1"
@@ -64,7 +64,7 @@
            android:padding="@dimen/_8sdp"/>
 
        <TextView
-           android:id="@+id/tv_share"
+           android:id="@+id/tv_share_meme"
            android:layout_width="0dp"
            android:layout_height="@dimen/_30sdp"
            android:layout_weight="1"

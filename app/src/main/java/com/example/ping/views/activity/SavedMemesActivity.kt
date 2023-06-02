@@ -1,11 +1,13 @@
 package com.example.ping.views.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
@@ -30,6 +32,8 @@ class SavedMemesActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Saved Memes"
+        supportActionBar?.show()
+        window.statusBarColor = ContextCompat.getColor(this, R.color.my_black)
 
         rvSavedMemes = findViewById(R.id.rv_saved_memes)
         pbLoadingSavedMemes = findViewById(R.id.pb_loading_saved_memes)
@@ -41,6 +45,17 @@ class SavedMemesActivity : AppCompatActivity() {
         dbRef = FirebaseDatabase.getInstance().reference
         showSavedMemes()
 
+    }
+
+    fun shareMeme(url: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, url)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
 

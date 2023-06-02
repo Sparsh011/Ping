@@ -3,15 +3,13 @@ package com.example.ping.views.activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -27,6 +25,7 @@ import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class UsersActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -76,6 +75,9 @@ class UsersActivity : AppCompatActivity() {
 //        Loading Users from database -
         loadUsers()
         changeActiveStatus(true)
+
+//        Enabling sharing capability -
+        onSharedIntent()
     }
 
     private fun showPopup(view: View) {
@@ -190,5 +192,33 @@ class UsersActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         })
+    }
+
+    private fun onSharedIntent() {
+        val receivedIntent = intent
+        val receivedAction = receivedIntent.action
+        val receivedType = receivedIntent.type
+        if (receivedAction == Intent.ACTION_SEND) {
+
+            // check mime type
+            if (receivedType!!.startsWith("text/")) {
+                val receivedText = receivedIntent
+                    .getStringExtra(Intent.EXTRA_TEXT)
+                if (receivedText != null) {
+                    //do your stuff
+                    Toast.makeText(applicationContext, receivedText, Toast.LENGTH_SHORT).show()
+                }
+            } else if (receivedType.startsWith("image/")) {
+                val receiveUri = receivedIntent
+                    .getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as Uri?
+                if (receiveUri != null) {
+                    //do your stuff
+//                    fileUri = receiveUri // save to your own Uri object
+                    Log.e(TAG, receiveUri.toString())
+                }
+            }
+        } else if (receivedAction == Intent.ACTION_MAIN) {
+            Log.e(TAG, "onSharedIntent: nothing shared")
+        }
     }
 }

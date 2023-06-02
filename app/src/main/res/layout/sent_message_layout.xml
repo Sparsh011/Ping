@@ -1,17 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="@dimen/_40sdp"
     android:layout_marginTop="@dimen/_6sdp"
     android:layout_marginEnd="@dimen/_6sdp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/day_of_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/sent_message_bg">
+        app:layout_constraintEnd_toStartOf="@+id/tv_sent_message"
+        app:layout_constraintTop_toTopOf="@+id/tv_sent_message"
+        android:text="Day NA"
+        android:layout_margin="@dimen/_2sdp"
+        android:textSize="@dimen/_10sdp"
+        android:textColor="@color/my_grey"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/tv_sent_message"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_sent_message"
+        android:text="Time NA"
+        android:textSize="@dimen/_8sdp"
+        android:layout_margin="@dimen/_2sdp"
+        android:textColor="@color/my_grey"
+        />
 
         <TextView
             android:id="@+id/tv_sent_message"
@@ -24,8 +43,10 @@
             android:textColor="@color/my_black"
             android:fontFamily="@font/lato"
             android:textSize="@dimen/_13sdp"
-            tools:text="Sent message" />
+            tools:text="Sent message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/sent_message_bg"
+            />
 
-    </RelativeLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
