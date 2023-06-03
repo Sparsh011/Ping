@@ -3,12 +3,14 @@ package com.example.ping.views.activity
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -24,6 +26,11 @@ import com.google.firebase.database.ktx.getValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var customChatRecyclerView: RecyclerView
@@ -38,6 +45,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chattingWithUserStatus: TextView
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +106,15 @@ class ChatActivity : AppCompatActivity() {
 //      Adding message to database -
         ivSendMessage.setOnClickListener {
             val msg = etMessage.text.toString()
-            val messageObject = MessageModel(msg, senderUid)
+            val currentTime = LocalTime.now()
+            val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+            val timeIn24HrFormat = currentTime.format(timeFormatter)
+
+            val currentDate = LocalDate.now()
+            val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            val date = currentDate.format(dateFormatter)
+
+            val messageObject = MessageModel(msg, senderUid, timeIn24HrFormat, date)
 
             if (msg.trim().isNotEmpty()) {
                 uploadChatsToDatabase(senderRoom!!, receiverRoom!!, messageObject)

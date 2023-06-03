@@ -36,10 +36,14 @@ class MessageAdapter(
         if (holder.javaClass == SentViewHolder::class.java){
             val viewHolder = holder as SentViewHolder
             holder.sentMessage.text = currentMessage.message
+            holder.sentAtTime.text = currentMessage.sentAtTime
+            holder.sentOnDay.text = currentMessage.sentOnDay
         }
         else{
             val viewHolder = holder as ReceivedViewHolder
             holder.receivedMessage.text = currentMessage.message
+            holder.receivedAtTime.text = currentMessage.sentAtTime
+            holder.receivedOnDay.text = currentMessage.sentOnDay
         }
     }
 
@@ -60,9 +64,13 @@ class MessageAdapter(
 
     class SentViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val sentMessage: TextView = itemView.findViewById(R.id.tv_sent_message)
+        val sentAtTime: TextView = itemView.findViewById(R.id.time_of_sent_message)
+        val sentOnDay: TextView = itemView.findViewById(R.id.day_of_sent_message)
     }
 
     class ReceivedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val receivedMessage: TextView = itemView.findViewById(R.id.tv_received_message)
+        val receivedAtTime: TextView = itemView.findViewById(R.id.time_of_received_message)
+        val receivedOnDay: TextView = itemView.findViewById(R.id.day_of_received_message)
     }
 }

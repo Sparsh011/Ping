@@ -10,27 +10,29 @@
     >
 
     <TextView
-        android:id="@+id/day_of_message"
+        android:id="@+id/day_of_sent_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@+id/tv_sent_message"
         app:layout_constraintTop_toTopOf="@+id/tv_sent_message"
         android:text="Day NA"
-        android:layout_margin="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
         android:textSize="@dimen/_10sdp"
         android:textColor="@color/my_grey"
+        app:layout_constraintWidth_percent="0.3"
         />
 
     <TextView
+        android:id="@+id/time_of_sent_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/tv_sent_message"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_sent_message"
+        android:layout_marginEnd="@dimen/_6sdp"
         android:text="Time NA"
-        android:textSize="@dimen/_8sdp"
-        android:layout_margin="@dimen/_2sdp"
         android:textColor="@color/my_grey"
-        />
+        android:textSize="@dimen/_8sdp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_sent_message"
+        app:layout_constraintTop_toBottomOf="@+id/day_of_sent_message"
+        app:layout_constraintWidth_percent="0.3" />
 
         <TextView
             android:id="@+id/tv_sent_message"
@@ -38,8 +40,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
-            android:paddingTop="@dimen/_4sdp"
-            android:paddingBottom="@dimen/_4sdp"
+            android:paddingTop="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_6sdp"
             android:textColor="@color/my_black"
             android:fontFamily="@font/lato"
             android:textSize="@dimen/_13sdp"
@@ -47,6 +49,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/sent_message_bg"
+            android:maxWidth="@dimen/_180sdp"
             />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
