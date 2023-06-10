@@ -5,6 +5,7 @@ class User {
     var number: String? = null
     var uid: String? = null
     var profilePic: String? = null
+    var deviceToken: String? = null
 
     constructor(){}
 
