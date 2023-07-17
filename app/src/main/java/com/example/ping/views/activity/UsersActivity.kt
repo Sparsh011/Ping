@@ -12,13 +12,16 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +29,11 @@ import com.example.ping.R
 import com.example.ping.model.entities.User
 import com.example.ping.views.adapter.UsersAdapter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.Dispatchers
@@ -150,6 +157,9 @@ class UsersActivity : AppCompatActivity() {
                 }
                 R.id.show_saved_memes -> {
                     startActivity(Intent(this, SavedMemesActivity::class.java))
+                }
+                R.id.profile -> {
+                    startActivity(Intent(this, EditProfileActivity::class.java))
                 }
             }
 

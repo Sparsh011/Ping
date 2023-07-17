@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.ping">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +22,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ping"
         tools:targetApi="31">
+        <activity
+            android:name=".views.activity.EditProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Ping.NoActionBar"
+            android:parentActivityName=".views.activity.UsersActivity"
+            />
 
         <service
             android:name=".services.MyFirebaseMessagingService"
@@ -25,14 +37,17 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/baseline_menu_24" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/my_black" />
@@ -40,41 +55,36 @@
         <activity
             android:name=".views.activity.SavedMemesActivity"
             android:exported="false"
-            android:theme="@style/Theme.Ping.NoActionBar"
-            android:parentActivityName=".views.activity.UsersActivity" />
-
+            android:parentActivityName=".views.activity.UsersActivity"
+            android:theme="@style/Theme.Ping.NoActionBar" />
         <activity
             android:name=".views.activity.MemesActivity"
             android:exported="false"
-            android:theme="@style/Theme.Ping.NoActionBar"
-            android:parentActivityName=".views.activity.UsersActivity" />
-
+            android:parentActivityName=".views.activity.UsersActivity"
+            android:theme="@style/Theme.Ping.NoActionBar" />
         <activity
             android:name=".views.activity.ChatActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".views.activity.UsersActivity"
             android:theme="@style/Theme.Ping.NoActionBar"
-            android:parentActivityName=".views.activity.UsersActivity" />
-
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".views.activity.UsersActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan" >
-
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
                 <data android:mimeType="text/*" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".views.activity.VerifyOTP"
             android:exported="false"
             android:theme="@style/Theme.Ping.NoActionBar" />
-
         <activity
             android:name=".views.activity.MainActivity"
             android:exported="true"
