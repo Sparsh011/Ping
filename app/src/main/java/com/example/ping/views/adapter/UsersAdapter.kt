@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
-import com.example.ping.model.User
+import com.example.ping.model.entities.User
 import com.example.ping.views.activity.ChatActivity
 
 class UsersAdapter(
@@ -38,7 +38,7 @@ class UsersAdapter(
     }
 
     class UsersViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val tvUsername = itemView.findViewById<TextView>(R.id.tv_username)
+        val tvUsername: TextView = itemView.findViewById(R.id.tv_username)
 
     }
 }

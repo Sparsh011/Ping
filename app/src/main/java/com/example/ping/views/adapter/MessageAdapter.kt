@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
-import com.example.ping.model.MessageModel
+import com.example.ping.model.entities.MessageModel
 import com.google.firebase.auth.FirebaseAuth
 
 class MessageAdapter(

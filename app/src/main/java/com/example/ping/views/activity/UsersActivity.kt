@@ -18,12 +18,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ping.R
-import com.example.ping.model.User
-import com.example.ping.services.MyFirebaseMessagingService
+import com.example.ping.model.entities.User
 import com.example.ping.views.adapter.UsersAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -55,6 +55,7 @@ class UsersActivity : AppCompatActivity() {
             // TODO: Inform user that that your app will not show notifications.
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
